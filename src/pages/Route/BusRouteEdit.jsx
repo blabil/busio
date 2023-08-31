@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BusRouteService from '../../services/BusRouteService';
 import { BasicFullPanel, BasicHeader, BasicPanel, BottomPanel, ButtonPanel, HeaderPanel, PanelHeader, RegisterButton, ReturnButton, TwoPartPanel, UpperPanel } from '../../components';
+import AssignDriverRouteModal from '../../components/AssignDriverRouteModal';
 
 const BusRouteEdit = () => {
 
@@ -17,6 +18,10 @@ const BusRouteEdit = () => {
     }
     function handleDriverCloseModal() {
       setIsDriverModalOpen(false);
+    }
+
+    const handleAssignDriverRoute = async () =>{
+
     }
 
     const returnTypeValue = (type) =>{
@@ -92,7 +97,13 @@ const BusRouteEdit = () => {
         </HeaderPanel>
         <ButtonPanel label={"INFORMACJE O TRASIE"}>
           <ReturnButton  path={`/busline/edit/${routeInfo.busLineID}`}/>
-          <RegisterButton label={"Przypisz kierowce"}/>
+          <RegisterButton label={"Przypisz kierowce"} onClick={handleDriverOpenModal}/>
+          <AssignDriverRouteModal
+            onClose={handleDriverCloseModal}
+            isOpen={isDriverModalOpen}
+            onSubmit={handleAssignDriverRoute}
+            routeID={id}
+          />
           <RegisterButton label={"Przypisz busa"}/>
         </ButtonPanel>
       </UpperPanel>
