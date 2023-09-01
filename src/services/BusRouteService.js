@@ -214,6 +214,21 @@ const BusRouteService = {
         ToastService.prepareToastMessage(error.response.data.message)
       );
     }
+  },
+
+  fetchDrivers: async (id) =>{
+    try {
+      const response = await axios.get(`${apiUrl}/worker/drivers/${id}`, {
+        withCredentials: true,
+      });
+      console.log(response.data)
+      return response.data;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+
   }
 
 };

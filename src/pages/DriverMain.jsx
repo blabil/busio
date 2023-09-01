@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   AssignDriverRouteModal,
-  ChooseBusModal,
   ChooseRouteModal,
 } from "../components";
 import { useNavigate, Link, useParams } from "react-router-dom";
@@ -67,13 +66,6 @@ const DriverMain = () => {
           >
             Wybierz Busa
           </button>
-          <ChooseBusModal
-            onClick={handleBusOpenModal}
-            isOpen={isBusModalOpen}
-            onClose={handleBusCloseModal}
-            onSubmit={test}
-            userID={userID}
-          />
           <button
             onClick={handleRouteOpenModal}
             className="bg-gray-800 text-white rounded-lg px-4 py-2 mr-2 hover:bg-gray-700 focus:bg-gray-700"
