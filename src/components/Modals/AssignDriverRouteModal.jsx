@@ -1,8 +1,8 @@
 
 import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
-import { ModalContainer, ModalInput, ModalTitle, SendButton } from ".";
-import BusRouteService from "../services/BusRouteService";
+import { ModalContainer, ModalInput, ModalTitle, SendButton } from "..";
+import BusRouteService from "../../services/BusRouteService";
 const AssignDriverRouteModal = ({ isOpen, onClose, onSubmit, routeID }) => {
   
     const [driverID, setDriverID] = useState("");

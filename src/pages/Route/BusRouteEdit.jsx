@@ -3,13 +3,12 @@ import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BusRouteService from '../../services/BusRouteService';
-import { BasicFullPanel, BasicHeader, BasicPanel, BottomPanel, ButtonPanel, HeaderPanel, PanelHeader, RegisterButton, ReturnButton, TwoPartPanel, UpperPanel } from '../../components';
-import AssignDriverRouteModal from '../../components/AssignDriverRouteModal';
-
+import { AssignBusRouteModal ,AssignDriverRouteModal, BasicFullPanel, BasicHeader, BasicPanel, BottomPanel, ButtonPanel, HeaderPanel, PanelHeader, RegisterButton, ReturnButton, TwoPartPanel, UpperPanel } from '../../components';
 const BusRouteEdit = () => {
 
     const { id } = useParams();
     const [isDriverModalOpen, setIsDriverModalOpen] = useState(false);
+    const [isBusModalOpen, setIsBusModalOpen] = useState(false);
     const [routeInfo, setRouteInfo] = useState({});
     const [route, setRoute] = useState([]);
 
@@ -21,6 +20,18 @@ const BusRouteEdit = () => {
     }
 
     const handleAssignDriverRoute = async () =>{
+
+    }
+
+
+    function handleBusOpenModal() {
+      setIsBusModalOpen(true);
+    }
+    function handleBusCloseModal() {
+      setIsBusModalOpen(false);
+    }
+
+    const handleAssignBusRoute = async () =>{
 
     }
 
@@ -104,7 +115,13 @@ const BusRouteEdit = () => {
             onSubmit={handleAssignDriverRoute}
             routeID={id}
           />
-          <RegisterButton label={"Przypisz busa"}/>
+          <RegisterButton label={"Przypisz busa"} onClick={handleBusOpenModal}/>
+          <AssignBusRouteModal
+            onClose={handleBusCloseModal}
+            isOpen={isBusModalOpen}
+            onSubmit={handleAssignBusRoute}
+            routeID={id}
+          />
         </ButtonPanel>
       </UpperPanel>
       <BottomPanel>
