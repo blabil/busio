@@ -102,7 +102,6 @@ const BusRouteService = {
     },
 
   handleRegisterBusLine: async (dto) =>{
-    console.log(dto);
     try{
         const response = await axios.post(
             `${apiUrl}/busline/register`,
@@ -221,7 +220,19 @@ const BusRouteService = {
       const response = await axios.get(`${apiUrl}/worker/drivers/${id}`, {
         withCredentials: true,
       });
-      console.log(response.data)
+      return response.data;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  handleAssingDriverToRoute: async (routeID, driverID) =>{
+    try{
+      const response = await axios.patch(`${apiUrl}/worker/assign/${routeID}`, {driverID: driverID}, {
+        withCredentials: true,
+      })
       return response.data;
     } catch(error) {
       throw new Error(
@@ -229,7 +240,33 @@ const BusRouteService = {
       );
     }
 
-  }
+  },
+
+  fetchBuses: async (id) =>{
+    try {
+      const response = await axios.get(`${apiUrl}/bus/buses/${id}`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  handleAssingBusToRoute: async (routeID, busID) =>{
+    try{
+      const response = await axios.patch(`${apiUrl}/bus/assign/${routeID}`, {busID: busID}, {
+        withCredentials: true,
+      })
+      return response.data;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
 
 };
 export default BusRouteService;
