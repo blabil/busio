@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BusRouteService from '../../services/BusRouteService';
-import { AssignBusRouteModal ,AssignDriverRouteModal, BasicFullPanel, BasicHeader, BasicPanel, BottomPanel, ButtonPanel, HeaderPanel, PanelHeader, RegisterButton, ReturnButton, TwoPartPanel, UpperPanel } from '../../components';
+import { AssignBusRouteModal ,AssignDriverRouteModal, BasicFullPanel, BasicHeader, BasicPanel, BottomPanel, ButtonPanel, HeaderPanel, NavigateHref, PanelHeader, RegisterButton, ReturnButton, TwoPartPanel, UpperPanel } from '../../components';
 const BusRouteEdit = () => {
 
     const { id } = useParams();
@@ -19,8 +19,19 @@ const BusRouteEdit = () => {
       setIsDriverModalOpen(false);
     }
 
-    const handleAssignDriverRoute = async () =>{
-
+    const handleAssignDriverRoute = async (driverID) =>{
+      let response = null;
+      try{
+        const temp = await BusRouteService.handleAssingDriverToRoute(id, driverID);
+        setRouteInfo({
+          ...routeInfo,
+          driver: temp.driver
+        })
+        response = temp.message;
+      } catch (error){
+        response = error.message;
+      }
+      triggerToast(response);
     }
 
 
@@ -31,8 +42,19 @@ const BusRouteEdit = () => {
       setIsBusModalOpen(false);
     }
 
-    const handleAssignBusRoute = async () =>{
-
+    const handleAssignBusRoute = async (busID) =>{
+      let response = null;
+      try{
+        const temp =  await BusRouteService.handleAssingBusToRoute(id, busID);
+        setRouteInfo({
+          ...routeInfo,
+          bus: temp.bus
+        })
+        response = temp.message;
+      } catch (error){
+        response = error.message;
+      }
+      triggerToast(response);
     }
 
     const returnTypeValue = (type) =>{
@@ -64,7 +86,7 @@ const BusRouteEdit = () => {
     }
 
     useEffect(() => {
-      console.log(routeInfo)
+      console.log(routeInfo.driver, routeInfo.bus)
     }, [routeInfo])
     
   const fetchBuslineRouteInfo = useCallback(async () => {
@@ -128,9 +150,25 @@ const BusRouteEdit = () => {
         <TwoPartPanel>
           <BasicPanel>
             <PanelHeader label={"INFORMACJE O KIEROWCY"} />
+            {routeInfo.driver ? (
+            <div className='flex flex-col justify-content items-center'>
+              <NavigateHref label={`Kierowca: ${routeInfo.driver.profile.fullName}`} path={`/user/type/${routeInfo.driver.id}`}></NavigateHref>
+              <BasicHeader label={"Telefon:"} value={routeInfo.driver.profile.phone}/>
+              <BasicHeader label={"Email:"} value={routeInfo.driver.email}/>
+            </div>
+            ) : (<div className='flex items-center justify-center'> Nie przypisano. </div>)}
+            
           </BasicPanel>
           <BasicPanel>
             <PanelHeader label={"INFORMACJE O BUSIE"} />
+            {routeInfo.bus ? (
+            <div className='flex flex-col justify-content items-center'>
+              <NavigateHref label={`Rejestracja: ${routeInfo.bus.registration}`} path={`/bus/edit/${routeInfo.bus.id}`}></NavigateHref>
+              <BasicHeader label={"Pojazd:"} value={routeInfo.bus.busProfile.brand +" "+ routeInfo.bus.busProfile.model} />
+              <BasicHeader label={"Ilość miejsca:"} value={routeInfo.bus.busProfile.seats} />
+
+            </div>
+            ) : (<div className='flex items-center justify-center'> Nie przypisano. </div>)}
           </BasicPanel>
         </TwoPartPanel>
         <TwoPartPanel>

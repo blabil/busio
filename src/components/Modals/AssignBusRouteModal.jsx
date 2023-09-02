@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
+import BusRouteService from "../../services/BusRouteService";
 import { ModalContainer, ModalInput, ModalTitle, SendButton } from "..";
 
 const AssignBusRouteModal = ({ isOpen, onClose, onSubmit, routeID }) => {
@@ -14,6 +15,13 @@ const AssignBusRouteModal = ({ isOpen, onClose, onSubmit, routeID }) => {
     }
 
     const fetchBus = async () => {
+      try{
+        const response = await BusRouteService.fetchBuses(routeID);
+        setBusList(response);
+      } catch(error)
+      {
+        console.log(error);
+      }
     };
 
 
