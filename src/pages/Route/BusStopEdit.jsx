@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link, useParams } from "react-router-dom";
-import axios from "axios";
-import { EditBusStopModal } from "../../components";
+import { Link, Navigate, useParams } from "react-router-dom";
+import {
+  BasicHeader,
+  BasicPanel,
+  BottomPanel,
+  ButtonPanel,
+  EditBusStopModal,
+  HeaderPanel,
+  NavigateHref,
+  PanelHeader,
+  RegisterButton,
+  TwoPartPanel,
+  UpperPanel,
+} from "../../components";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import BusRouteService from "../../services/BusRouteService";
 
 const BusStopEdit = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [stop, setStop] = useState();
   const [busLines, setBusLines] = useState([]);
-  const [czas, setCzas] = useState([]);
   const [stopConnections, setStopConnections] = useState([]);
 
   const [isEditBusStopModalOpen, setIsEditBusStopModalOpen] = useState(false);
@@ -23,168 +33,128 @@ const BusStopEdit = () => {
     setIsEditBusStopModalOpen(false);
   }
 
+  async function handleUpdateBusStop(address) {
+    let response = null;
+    try {
+      response = await BusRouteService.handleUpdateBusStop(id, address);
+      setStop(address);
+    } catch (error) {
+      response = error.message;
+    }
+    triggerToast(response);
+  }
+
+  const fetchStop = async () => {
+    try {
+      const response = await BusRouteService.fetchBusStop(id);
+      setStop(response);
+    } catch (error) {
+      triggerToast(error.message);
+    }
+  };
+
+  const fetchBusLine = async () => {
+    try {
+      const response = await BusRouteService.fetchBusLineByStop(id);
+      setBusLines(response);
+    } catch (error) {
+      triggerToast(error.message);
+    }
+  };
+
+  const fetchStopConnections = async () => {
+    try {
+      const response = await BusRouteService.fetchStopConnections(id);
+      setStopConnections(response);
+    } catch (error) {
+      triggerToast(error.message);
+    }
+  };
+
+  const handleChangeTime = async (index, e) => {
+    const connection = [...stopConnections];
+    connection[index].time = e.target.value;
+    setStopConnections(connection);
+  };
+
+  const updateTimeConnection = async (index) => {
+    const connectionTime = stopConnections[index].time;
+    const busStopToID = stopConnections[index].busStopToID;
+    let response = null;
+    try {
+      response = await BusRouteService.handleUpdateTimeConnection(
+        id,
+        connectionTime,
+        busStopToID
+      );
+    } catch (error) {
+      response = error.message;
+    }
+    triggerToast(response);
+  };
+
+  const triggerToast = (message) => {
+    toast(message, {
+      autoClose: 5000,
+      hideProgressBar: false,
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+  };
+
   useEffect(() => {
     fetchBusLine();
     fetchStop();
     fetchStopConnections();
   }, [id]);
 
-  async function handleUpdateBusStop(address) {
-    await axios
-      .patch(
-        `http://localhost:5000/busstop/${id}`,
-        { address },
-        { withCredentials: true }
-      )
-      .then((response) => {
-        toast(response.data.message, {
-          autoClose: 5000,
-          hideProgressBar: false,
-          position: toast.POSITION.BOTTOM_RIGHT,
-        });
-      })
-      .catch((error) => {
-        let message = "";
-        if (Array.isArray(error.response.data.message))
-          message = error.response.data.message[0];
-        else message = error.response.data.message;
-        toast(message, {
-          autoClose: 5000,
-          hideProgressBar: false,
-          position: toast.POSITION.BOTTOM_RIGHT, // pozycja powiadomienia
-        });
-      });
-    setStop(address);
-  }
-
-  const fetchStop = async () => {
-    await axios
-      .get(`http://localhost:5000/busstop/${id}`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response.data);
-        setStop(response.data.address);
-      })
-      .catch((error) => {
-        navigate("/");
-      });
-  };
-
-  const fetchBusLine = async () => {
-    await axios
-      .get(`http://localhost:5000/busstop/buslines/${id}`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response.data.busLines);
-        setBusLines(response.data.busLines);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const fetchStopConnections = async () => {
-    await axios
-      .get(`http://localhost:5000/busstop/connections/${id}`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response.data);
-        setStopConnections(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleChangeTime = async (index, e) => {
-
-    const connection = [...stopConnections];
-    connection[index].time = e.target.value;
-    setStopConnections(connection);
-  };
-
-  const updateTimeConnection = async(index) => {
-    const connectionTime = stopConnections[index].time;
-    const busStopToID = stopConnections[index].busStopToID;
-    await axios
-      .patch(
-        `http://localhost:5000/busstop/updatetimeconnection/${id}`,
-        { connectionTime, busStopToID},
-        { withCredentials: true }
-      )
-      .then((response) => {
-        toast(response.data.message, {
-          autoClose: 5000,
-          hideProgressBar: false,
-          position: toast.POSITION.BOTTOM_RIGHT,
-        });
-      })
-      .catch((error) => {
-        let message = "";
-        if (Array.isArray(error.response.data.message))
-          message = error.response.data.message[0];
-        else message = error.response.data.message;
-        toast(message, {
-          autoClose: 5000,
-          hideProgressBar: false,
-          position: toast.POSITION.BOTTOM_RIGHT, // pozycja powiadomienia
-        });
-      });
-  }
-
   return (
     <div className="flex flex-col gap-3 h-screen">
-      {/* Górna sekcja */}
-      <div className="flex  justify-between mx-8 mb-6 shadow-lg rounded-lg bg-white border-0">
-        <div className="flex justify-center gap-3 flex-col w-2/6 px-6 py-6">
-          <h1>Przystanek: {stop}</h1>
-        </div>
+      <UpperPanel>
+        <HeaderPanel>
+          <BasicHeader label={"Przystanek:"} value={stop} />
+        </HeaderPanel>
 
-        <div className="bg-white flex justify-center items-center p-4 w-3/4 rounded-lg"></div>
-
-        <div className="bg-white flex justify-center items-center p-4 w-3/4">
-          <button
+        <ButtonPanel label={"Edycja przystanku"}>
+          <RegisterButton
             onClick={handleBusTopEditOpenModal}
-            className="bg-gray-800 text-white rounded-lg px-4 py-2 mr-2 hover:bg-gray-700 focus:bg-gray-700"
-          >
-            Zmień adres
-          </button>
-
+            label={"Edytuj przystanek"}
+          />
           <EditBusStopModal
             onClick={handleBusTopEditOpenModal}
             isOpen={isEditBusStopModalOpen}
             onClose={handleBusTopEditCloseModal}
             onSubmit={handleUpdateBusStop}
           />
-        </div>
-      </div>
-
-      {/* Dolna sekcja */}
-      <div className="flex-1 flex-col bg-white items-center mx-8 break-words mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
-        <div className="flex justify-around w-full h-1/6">
-          <div className="flex w-2/4">
-            <table className="w-full mt-4 px-4">
-              <thead>
+        </ButtonPanel>
+      </UpperPanel>
+      <BottomPanel>
+        <TwoPartPanel>
+          <BasicPanel>
+            <PanelHeader label={"Połączenia"} />
+            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+              <thead className="text-xs text-gray-700 uppercase border-1 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left">
-                    Przystanek
+                  <th scope="col" className="px-4 py-4 text-center">
+                    PRZYSTANEK
                   </th>
-                  <th className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left">
-                    Czas
+                  <th scope="col" className="px-4 py-4 text-center">
+                    CZAS
                   </th>
-                  <th className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left"></th>
+                  <th scope="col" className="px-4 py-4 text-center">
+                    ZAPISZ
+                  </th>
                 </tr>
               </thead>
-              <tbody className="bg-white">
+              <tbody>
                 {stopConnections.map((connection, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left">
-                      {connection.address}
+                  <tr
+                    key={index}
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  >
+                    <td className="px-6 py-4 text-center">
+                      <h1 className="text-bold">{connection.address}</h1>
                     </td>
-                    <td className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left">
+                    <td className="px-6 py-4 text-center">
                       <input
                         value={stopConnections[index].time}
                         onChange={(e) => handleChangeTime(index, e)}
@@ -196,8 +166,11 @@ const BusStopEdit = () => {
                         required
                       ></input>
                     </td>
-                    <td className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left">
-                      <button onClick={() => updateTimeConnection(index)} className="bg-transparent hover:bg-cyan-400 text-sm text-black-400 hover:text-white font-semibold py-2 px-4 border border-blue-400 hover:border-transparent rounded-lg">
+                    <td className="px-6 py-4 text-center">
+                      <button
+                        onClick={() => updateTimeConnection(index)}
+                        className="bg-transparent hover:bg-teal-500 text-sm text-black-400 hover:text-white py-2 px-4 border border-sky-400 hover:border-transparent rounded-lg"
+                      >
                         Zapisz
                       </button>
                     </td>
@@ -205,38 +178,36 @@ const BusStopEdit = () => {
                 ))}
               </tbody>
             </table>
-          </div>
-
-          <div className="flex w-2/4">
-            <table className="w-full mt-4 px-4">
-              <thead>
+          </BasicPanel>
+          <BasicPanel>
+            <PanelHeader label={"Linie"} />
+            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+              <thead className="text-xs text-gray-700 uppercase border-1 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left">
-                    Numer Linii
+                  <th scope="col" className="px-4 py-4 text-center">
+                    Linia
                   </th>
-                  <th className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left"></th>
                 </tr>
               </thead>
-              <tbody className="bg-white">
+              <tbody>
                 {busLines.map((busLine, index) => (
-                  <tr key={index}>
+                  <tr
+                    key={index}
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  >
                     <td className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left">
-                      {busLine.number}
-                    </td>
-                    <td className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left">
-                      <Link to={`/busline/edit/${busLine.id}`}>
-                        <button className="bg-transparent hover:bg-cyan-400 text-sm text-black-400 hover:text-white font-semibold py-2 px-4 border border-blue-400 hover:border-transparent rounded-lg">
-                          Przejdź
-                        </button>
-                      </Link>
+                      <NavigateHref
+                        label={busLine.number}
+                        path={`/busline/edit/${busLine.id}`}
+                      />
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-        </div>
-      </div>
+          </BasicPanel>
+        </TwoPartPanel>
+      </BottomPanel>
       <ToastContainer />
     </div>
   );

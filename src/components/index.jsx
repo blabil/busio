@@ -11,7 +11,7 @@ export { default as DriverSidebar } from "./Sidebars/DriverSidebar";
 export { default as DeleteModal } from "./DeleteModal";
 export { default as RegisterBusStopModal } from "./Modals/RegisterBusStopModal";
 export { default as CreateRouteModal } from "./Modals/CreateRouteModal";
-export { default as EditBusStopModal } from "./EditBusStopModal";
+export { default as EditBusStopModal } from "./Modals/EditBusStopModal";
 export { default as ChooseRouteModal } from "./ChooseRouteModal";
 export { default as BreakDownModal } from "./Modals/BreakDownModal";
 export { default as ReviewModal } from "./Modals/ReviewModal";

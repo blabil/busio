@@ -35,7 +35,7 @@ const BusLineEdit = () => {
 
   async function handleCreateRoute(dto) {
     let response = null;
-    try{
+    try {
       response = await BusRouteService.handleCreateRoute(dto);
       fetchBusLineRoutes();
     } catch (error) {
@@ -44,7 +44,7 @@ const BusLineEdit = () => {
     triggerToast(response);
   }
 
-  const fetchBusLineRoutes = useCallback (async () => {
+  const fetchBusLineRoutes = useCallback(async () => {
     try {
       const response = await BusRouteService.fetchBusLineRoutes(id);
       setRoutes(response);
@@ -65,10 +65,10 @@ const BusLineEdit = () => {
 
   const handleDeleteRoute = async (routeID) => {
     let response = null;
-    try{
+    try {
       response = await BusRouteService.handleDeleteRoute(routeID);
-      fetchBusLineRoutes()
-    } catch(error) {
+      fetchBusLineRoutes();
+    } catch (error) {
       response = error.message;
     }
     triggerToast(response);
@@ -99,9 +99,17 @@ const BusLineEdit = () => {
           <BasicHeader label={"ODCINEK:"} value={busLine.part} />
         </HeaderPanel>
         <ButtonPanel label={"EDYCJA LINII AUTOBUSOWEJ"}>
-        <ReturnButton path={'/busline/list'} />
-        <RegisterButton onClick={handleRouteOpenModal} label={"Dodaj trase"}/>
-        <CreateRouteModal onClose={handleRouteCloseModal} isOpen={isRouteModalOpen} onSubmit={handleCreateRoute} busLineID={id} />
+          <ReturnButton path={"/busline/list"} />
+          <RegisterButton
+            onClick={handleRouteOpenModal}
+            label={"Dodaj trase"}
+          />
+          <CreateRouteModal
+            onClose={handleRouteCloseModal}
+            isOpen={isRouteModalOpen}
+            onSubmit={handleCreateRoute}
+            busLineID={id}
+          />
         </ButtonPanel>
       </UpperPanel>
 
@@ -189,15 +197,20 @@ const BusLineEdit = () => {
                       #{route.id}
                     </th>
                     <td className="px-6 py-4 text-center">
-                        <h1 className="text-bold">{route.startTime}</h1>
+                      <h1 className="text-bold">{route.startTime}</h1>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {route.fullRoute === true ? <h1 className="text-bold">Tak</h1> : <h1 className="text-bold">Nie</h1>}
+                      {route.fullRoute === true ? (
+                        <h1 className="text-bold">Tak</h1>
+                      ) : (
+                        <h1 className="text-bold">Nie</h1>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <button
                         onClick={() => handleDeleteRoute(`${route.id}`)}
-                        className="px-5 py-2 border-red-500 border text-sky-400 rounded transition duration-300 hover:bg-teal-500 hover:text-white focus:outline-none">
+                        className="px-5 py-2 border-red-500 border text-sky-400 rounded transition duration-300 hover:bg-teal-500 hover:text-white focus:outline-none"
+                      >
                         Usuń
                       </button>
                     </td>

@@ -268,5 +268,90 @@ const BusRouteService = {
     }
   },
 
+  fetchBusStop: async (id) =>{
+    try{
+      const response = await axios
+      .get(`${apiUrl}/busstop/${id}`, {
+        withCredentials: true,
+      })
+      return response.data.address;
+
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  fetchBusLineByStop: async (id) =>{
+    try{
+      const response = await axios
+      .get(`${apiUrl}/busstop/buslines/${id}`, {
+        withCredentials: true,
+      })
+      return response.data.busLines;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  fetchStopConnections: async (id) =>{
+    try{
+      const response = await axios
+      .get(`${apiUrl}/busstop/connections/${id}`, {
+        withCredentials: true,
+      })
+      return response.data;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  handleUpdateBusStop: async (id, address) =>{
+    try{
+      const response =  await axios
+      .patch(
+        `${apiUrl}/busstop/${id}`,
+        { address },
+        { withCredentials: true }
+      )
+      return response.data.message;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  handleUpdateTimeConnection: async (id, connectionTime, busStopToID) =>{
+    try{
+      const response = await axios
+      .patch(
+        `${apiUrl}/busstop/updatetimeconnection/${id}`,
+        { connectionTime, busStopToID},
+        { withCredentials: true }
+      )
+      return response.data.message;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  fetchRoutesAssignedTo: async(id, type) => {
+    try{
+      const response = await axios.get(`${apiUrl}/route/assigned/${id}/${type}`, {withCredentials: true});
+      return response.data;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  }
 };
 export default BusRouteService;

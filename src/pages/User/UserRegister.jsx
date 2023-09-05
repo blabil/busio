@@ -15,20 +15,24 @@ const DriverRegister = () => {
 
   const handleRegister = async () => {
     const fullName = name + " " + surname;
-    const userDto = UserService.returnUserDto(email, fullName, phone, password, role, address);
-    try{
+    const userDto = UserService.returnUserDto(
+      email,
+      fullName,
+      phone,
+      password,
+      role,
+      address
+    );
+    try {
       const response = await UserService.handleRegisterUser(userDto);
       triggerToast(response);
-    }
-    catch(error)
-    {
+    } catch (error) {
       triggerToast(error.message);
     }
     resetForms();
   };
 
-  const resetForms = () =>
-  {
+  const resetForms = () => {
     setEmail("");
     setPassword("");
     setName("");
@@ -36,7 +40,7 @@ const DriverRegister = () => {
     setPhone("");
     setAddress("");
     setRole("DRIVER");
-  }
+  };
 
   const triggerToast = (message) => {
     toast(message, {
@@ -64,13 +68,13 @@ const DriverRegister = () => {
                     Powrót
                   </button>
                 </Link>
-                  <button
-                    onClick={handleRegister}
-                    className="bg-sky-400 text-white font-bold uppercase text-xs px-4 py-2 rounded hover:bg-teal-500 ease-linear transition-all duration-150 mx-2"
-                    type="button"
-                  >
-                    Dodaj
-                  </button>
+                <button
+                  onClick={handleRegister}
+                  className="bg-sky-400 text-white font-bold uppercase text-xs px-4 py-2 rounded hover:bg-teal-500 ease-linear transition-all duration-150 mx-2"
+                  type="button"
+                >
+                  Dodaj
+                </button>
               </div>
             </div>
           </div>

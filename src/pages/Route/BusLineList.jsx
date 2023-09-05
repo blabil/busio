@@ -135,12 +135,8 @@ const BusLine = () => {
                 >
                   #{busLine.id}
                 </th>
-                <td className="px-6 py-4 text-center">
-                  {busLine.number}
-                </td>
-                <td className="px-6 py-4 text-center">
-                  {busLine.part}
-                </td>
+                <td className="px-6 py-4 text-center">{busLine.number}</td>
+                <td className="px-6 py-4 text-center">{busLine.part}</td>
                 <td className="px-6 py-4 text-center">
                   <button
                     onClick={() => handleDelete(busLine.id)}

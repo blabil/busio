@@ -9,8 +9,8 @@ const RegisterBusLine = () => {
   const [pola, setPola] = useState([]);
   const [czas, setCzas] = useState([]);
   const [stops, setStops] = useState([]);
-  const [number, setNumber] = useState('');
-  const [part, setPart] = useState('');
+  const [number, setNumber] = useState("");
+  const [part, setPart] = useState("");
 
   useEffect(() => {
     fetchStops();
@@ -23,11 +23,11 @@ const RegisterBusLine = () => {
 
   const handleRegisterLineBus = async () => {
     let response = null;
-    try{
-      response = await BusRouteService.handleRegisterBusLine(BusRouteService.returnBusLineDto(number, part, pola, czas));
-    }
-    catch(error)
-    {
+    try {
+      response = await BusRouteService.handleRegisterBusLine(
+        BusRouteService.returnBusLineDto(number, part, pola, czas)
+      );
+    } catch (error) {
       response = error.message;
     }
     triggerToast(response);
@@ -56,28 +56,31 @@ const RegisterBusLine = () => {
     nowyCzas[index - 1].bustopid_1 = pola[index - 1];
     nowyCzas[index - 1].bustopid_2 = pola[index];
     nowyCzas[index - 1].time = e.target.value;
-    nowyCzas[index - 1].order = index-1;
+    nowyCzas[index - 1].order = index - 1;
 
-    if(pola[index - 1].id !== "" && pola[index].id !== "")
-    {
+    if (pola[index - 1].id !== "" && pola[index].id !== "") {
       const busStop1 = pola[index - 1];
       const busStop2 = pola[index];
       console.log(busStop1, busStop2);
-      
-      const response = await BusRouteService.handleChangeTime(busStop1, busStop2);
-      if(response.isTime)
-      {
+
+      const response = await BusRouteService.handleChangeTime(
+        busStop1,
+        busStop2
+      );
+      if (response.isTime) {
         nowyCzas[index - 1].time = response.time;
       }
     }
     setCzas(nowyCzas);
-
   };
 
   const dodajPole = () => {
     setPola([...pola, { id: "" }]);
-    if(pola.length>0){
-      setCzas([...czas, { bustopid_1: "", bustopid_2: "", time: "", order: "" }]);
+    if (pola.length > 0) {
+      setCzas([
+        ...czas,
+        { bustopid_1: "", bustopid_2: "", time: "", order: "" },
+      ]);
     }
   };
 
@@ -102,24 +105,23 @@ const RegisterBusLine = () => {
   }
 
   async function handleRegisterBusStop(address) {
-    let response = null
-    try{
-      response = await BusRouteService.handleRegisterBusStop(address)
+    let response = null;
+    try {
+      response = await BusRouteService.handleRegisterBusStop(address);
       fetchStops();
-    }catch(error)
-    {
-      response = error.message
+    } catch (error) {
+      response = error.message;
     }
     triggerToast(response);
   }
 
   const triggerToast = (message) => {
-      toast(message, {
-        autoClose: 5000,
-        hideProgressBar: false,
-        position: toast.POSITION.BOTTOM_RIGHT,
-      });
-  }
+    toast(message, {
+      autoClose: 5000,
+      hideProgressBar: false,
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+  };
   return (
     <section className=" py-1 bg-blueGray-50">
       <div className="w-full lg:w-8/12 px-4 mx-auto mt-6">
@@ -197,7 +199,7 @@ const RegisterBusLine = () => {
                   </label>
                   <input
                     value={number}
-                    onChange={(e)=> setNumber(e.target.value)}
+                    onChange={(e) => setNumber(e.target.value)}
                     type="text"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     placeholder="405"
@@ -213,7 +215,7 @@ const RegisterBusLine = () => {
                   </label>
                   <input
                     value={part}
-                    onChange={(e)=> setPart(e.target.value)}
+                    onChange={(e) => setPart(e.target.value)}
                     type="text"
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     placeholder="Nysa - Otmuchów"

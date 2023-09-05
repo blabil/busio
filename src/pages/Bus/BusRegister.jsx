@@ -11,29 +11,35 @@ const BusRegister = () => {
   const [productionYear, setProductionYear] = useState("");
   const [engine, setEngine] = useState("DIESEL");
   const [seats, setSeats] = useState(0);
-  const state  = "AVAIABLE";
+  const state = "AVAIABLE";
 
   const handleRegister = async () => {
-    const busDto = BusEditService.returnBusDto(registration, state, brand, model, productionYear, seats, engine);
-      try{
-        const response = await BusEditService.handleRegisterBus(busDto);
-        triggerToast(response);
-      }catch(error)
-      {
-        triggerToast(error.message);
-      }
-      resetForms();
+    const busDto = BusEditService.returnBusDto(
+      registration,
+      state,
+      brand,
+      model,
+      productionYear,
+      seats,
+      engine
+    );
+    try {
+      const response = await BusEditService.handleRegisterBus(busDto);
+      triggerToast(response);
+    } catch (error) {
+      triggerToast(error.message);
+    }
+    resetForms();
   };
 
-
-  const resetForms = () =>{
-    setBrand('');
-    setModel('');
-    setRegistration('');
-    setProductionYear('');
-    setEngine('DIESEL');
+  const resetForms = () => {
+    setBrand("");
+    setModel("");
+    setRegistration("");
+    setProductionYear("");
+    setEngine("DIESEL");
     setSeats(0);
-  }
+  };
 
   const triggerToast = (message) => {
     toast(message, {
@@ -41,7 +47,7 @@ const BusRegister = () => {
       hideProgressBar: false,
       position: toast.POSITION.BOTTOM_RIGHT,
     });
-  }
+  };
 
   return (
     <section className=" py-1 bg-blueGray-50">
