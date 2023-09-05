@@ -180,7 +180,7 @@ const BusStopEdit = () => {
             </table>
           </BasicPanel>
           <BasicPanel>
-            <PanelHeader label={"Linie"}/>
+            <PanelHeader label={"Linie"} />
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase border-1 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -190,18 +190,21 @@ const BusStopEdit = () => {
                 </tr>
               </thead>
               <tbody>
-              {busLines.map((busLine, index) => (
-              <tr
-              key={index}
-              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-              >
-                <td className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left">
-                  <NavigateHref label={busLine.number} path={`/busline/edit/${busLine.id}`}/>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                {busLines.map((busLine, index) => (
+                  <tr
+                    key={index}
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  >
+                    <td className="px-6 py-3  leading-4 text-blue-500 tracking-wider text-left">
+                      <NavigateHref
+                        label={busLine.number}
+                        path={`/busline/edit/${busLine.id}`}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </BasicPanel>
         </TwoPartPanel>
       </BottomPanel>

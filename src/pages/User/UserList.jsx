@@ -5,11 +5,9 @@ import { UserService } from "../../services";
 const DriverList = () => {
   const [workerList, setWorkerList] = useState([]);
 
-
-  const fetchWorkers = useCallback (async () =>
-  {
+  const fetchWorkers = useCallback(async () => {
     setWorkerList(await UserService.getWorkers());
-  },[])
+  }, []);
 
   useEffect(() => {
     fetchWorkers();
@@ -137,10 +135,10 @@ const DriverList = () => {
                 <td className="px-6 py-4 text-center">
                   <h1 className="text-bold">{user.role}</h1>
                 </td>
-                
+
                 <td className="px-6 py-4 text-center">
                   <Link to={`/user/type/${user.id}`}>
-                    <button  className="px-5 py-2 border-sky-400 border text-sky-400 rounded transition duration-300 hover:bg-teal-500 hover:text-white">
+                    <button className="px-5 py-2 border-sky-400 border text-sky-400 rounded transition duration-300 hover:bg-teal-500 hover:text-white">
                       Szczegóły
                     </button>
                   </Link>

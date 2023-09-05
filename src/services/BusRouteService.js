@@ -341,6 +341,17 @@ const BusRouteService = {
         ToastService.prepareToastMessage(error.response.data.message)
       );
     }
+  },
+
+  fetchRoutesAssignedTo: async(id, type) => {
+    try{
+      const response = await axios.get(`${apiUrl}/route/assigned/${id}/${type}`, {withCredentials: true});
+      return response.data;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   }
 };
 export default BusRouteService;

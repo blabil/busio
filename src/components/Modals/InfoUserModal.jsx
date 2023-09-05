@@ -12,29 +12,27 @@ const InfoUserModal = ({ onClose, isOpen, id, type }) => {
 
   const abortController = useMemo(() => new AbortController(), []);
 
-  const fetchData = useCallback(async() => {
-    try{
-        const response = await UserService.fetchMechanicInfoData(id, type, abortController.signal );
-        setData(response.data);
-        setBus(response.data.bus);
-        setModify(response.modifyList);
-    }catch(error)
-    {
-
-    }
-  }, [id, type, abortController.signal])
-
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await UserService.fetchMechanicInfoData(
+        id,
+        type,
+        abortController.signal
+      );
+      setData(response.data);
+      setBus(response.data.bus);
+      setModify(response.modifyList);
+    } catch (error) {}
+  }, [id, type, abortController.signal]);
 
   useEffect(() => {
-    if(id)
-    fetchData();
+    if (id) fetchData();
 
-    return () =>{
+    return () => {
       abortController.abort();
-    }
+    };
   }, [id, abortController, fetchData]);
 
-  
   return data ? (
     <ReactModal
       className="flex items-center justify-center h-screen"
@@ -63,9 +61,7 @@ const InfoUserModal = ({ onClose, isOpen, id, type }) => {
               })}
             </h1>
           ) : (
-            <h1 className="uppercase font-bold">
-              Nie naprawiono:
-            </h1>
+            <h1 className="uppercase font-bold">Nie naprawiono:</h1>
           )}
         </div>
         <div>

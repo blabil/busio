@@ -1,35 +1,35 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import createdAt from "../../data/createdAt.png";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import {
-    BasicFullPanel,
-    BottomPanel,
-    ButtonPanel,
-    HeaderPanel,
-    OpenModalPanelButton,
-    PanelHeader,
-    ReturnButton,
-    TwoPartPanel,
-    UpperPanel,
-    InfoUserModal,
-    BasicHeader,
-    NavigatePanelButton,
-  } from "../../components";
-  import { UserService } from '../../services';
+  BasicFullPanel,
+  BottomPanel,
+  ButtonPanel,
+  HeaderPanel,
+  OpenModalPanelButton,
+  PanelHeader,
+  ReturnButton,
+  TwoPartPanel,
+  UpperPanel,
+  InfoUserModal,
+  BasicHeader,
+  NavigatePanelButton,
+} from "../../components";
+import { UserService } from "../../services";
 
 const UserListModify = () => {
   const { id, type } = useParams();
-  const [title, setTitle] = useState('')
-  const [panelTitle, setPanelTitle] = useState('')
+  const [title, setTitle] = useState("");
+  const [panelTitle, setPanelTitle] = useState("");
   const [data, setData] = useState([]);
   const [user, setUser] = useState({});
 
   const [idToModal, setIdToModal] = useState();
   const [isInfoOpen, setIsInfo] = useState(false);
   async function handleOpenInfo(problem_id) {
-      setIdToModal(problem_id)
-      setIsInfo(true);
+    setIdToModal(problem_id);
+    setIsInfo(true);
   }
 
   function handleCloseInfo() {
@@ -37,27 +37,28 @@ const UserListModify = () => {
   }
 
   const fetchUserData = useCallback(async () => {
-    const response = await UserService.fetchUserModifyData(id, type.toUpperCase());
+    const response = await UserService.fetchUserModifyData(
+      id,
+      type.toUpperCase()
+    );
     const user = await UserService.handleUserDetails(id);
     setData(response.data);
     setUser(user);
-  }, [id, type])
+  }, [id, type]);
 
   useEffect(() => {
-    if(type === 'breakdown')
-    {
+    if (type === "breakdown") {
       setTitle("LISTA MODYFIKACJI NAPRAW");
       setPanelTitle("MODIFIKACJE NAPRAW");
-    }  
-    if(type === 'issue')  
-    {
+    }
+    if (type === "issue") {
       setTitle("LISTA MODIFIKACJI USTEREK");
       setPanelTitle("MODYFIKACJE USTEREK");
     }
     fetchUserData();
   }, [type, fetchUserData]);
-  
-  return data? (
+
+  return data ? (
     <div className="flex flex-col gap-3 h-screen">
       <UpperPanel>
         <HeaderPanel>
@@ -118,13 +119,16 @@ const UserListModify = () => {
                       {element.id}
                     </th>
                     <td className="px-6 py-4 text-center">
-                      {
-                        element.busIssue ? (<h1 className="text-bold">{element.busIssue.title}</h1>) : (<h1 className="text-bold">{element.BusBreakDown.title}</h1>)
-                      }
-                      
+                      {element.busIssue ? (
+                        <h1 className="text-bold">{element.busIssue.title}</h1>
+                      ) : (
+                        <h1 className="text-bold">
+                          {element.BusBreakDown.title}
+                        </h1>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-center">
-                    <h1 className="text-bold">{element.desc}</h1>
+                      <h1 className="text-bold">{element.desc}</h1>
                     </td>
                     <td className="px-6 py-4 text-center">
                       {new Date(element.modifyAt).toLocaleDateString("pl-PL", {
@@ -134,18 +138,28 @@ const UserListModify = () => {
                       })}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {
-                        element.busIssue_id ? (<OpenModalPanelButton
+                      {element.busIssue_id ? (
+                        <OpenModalPanelButton
                           onClick={() => handleOpenInfo(element.busIssue_id)}
-                      />) : (<OpenModalPanelButton
-                        onClick={() => handleOpenInfo(element.BusBreakDown_id)}
-                    />)}
+                        />
+                      ) : (
+                        <OpenModalPanelButton
+                          onClick={() =>
+                            handleOpenInfo(element.BusBreakDown_id)
+                          }
+                        />
+                      )}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {
-                        element.busIssue ? (<NavigatePanelButton path={`/bus/edit/${element.busIssue.bus_id}`}/>) : (<NavigatePanelButton path={`/bus/edit/${element.BusBreakDown.bus_id}`}/>)
-                      }
-                      
+                      {element.busIssue ? (
+                        <NavigatePanelButton
+                          path={`/bus/edit/${element.busIssue.bus_id}`}
+                        />
+                      ) : (
+                        <NavigatePanelButton
+                          path={`/bus/edit/${element.BusBreakDown.bus_id}`}
+                        />
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -155,13 +169,13 @@ const UserListModify = () => {
         </TwoPartPanel>
       </BottomPanel>
       <InfoUserModal
-            onClose={handleCloseInfo}
-            isOpen={isInfoOpen}
-            id={idToModal}
-            type={type.toUpperCase()}
-          />
+        onClose={handleCloseInfo}
+        isOpen={isInfoOpen}
+        id={idToModal}
+        type={type.toUpperCase()}
+      />
     </div>
-  ) : null
-}
+  ) : null;
+};
 
-export default UserListModify
+export default UserListModify;

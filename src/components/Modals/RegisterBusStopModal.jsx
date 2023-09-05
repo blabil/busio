@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
-import {
-  ModalContainer,
-  ModalInput,
-  ModalTitle,
-  SendButton,
-} from "..";
+import { ModalContainer, ModalInput, ModalTitle, SendButton } from "..";
 
 const RegisterBusStopModal = ({ isOpen, onClose, onSubmit }) => {
   const [inputValue, setInputValue] = useState("");

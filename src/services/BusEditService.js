@@ -226,8 +226,23 @@ const BusEditService = {
       busIssues: response.data.busIssues,
       busBreakDowns: response.data.busBreakDowns,
       busReviews: response.data.busReview,
+      busRoutes: response.data.busLineRoute,
     };
   },
+
+  fetchBusProfile: async (id) => {
+    try {
+      const response = await axios.get(`${apiUrl}/bus/profile/${id}`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
 
   handleRegisterIssueModify: async (dto) => {
     try {
