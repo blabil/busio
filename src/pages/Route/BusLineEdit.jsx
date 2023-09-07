@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
+  AddStopModal,
   BasicHeader,
   BasicPanelFull,
   BottomPanel,
@@ -25,6 +26,7 @@ const BusLineEdit = () => {
   const [connections, setConnections] = useState([]);
   const [routes, setRoutes] = useState([]);
   const [isRouteModalOpen, setIsRouteModalOpen] = useState(false);
+  const [isAddStopOpen, setIsAddStopOpen] = useState(false)
 
   function handleRouteOpenModal() {
     setIsRouteModalOpen(true);
@@ -32,6 +34,28 @@ const BusLineEdit = () => {
   function handleRouteCloseModal() {
     setIsRouteModalOpen(false);
   }
+
+  function handleOpenAddStopModal() {
+    setIsAddStopOpen(true);
+  }
+  function handleCloseAddStopModal() {
+    setIsAddStopOpen(false);
+  }
+
+  const handleAddBusTop = async (data, busStop) =>{
+    data.busStop = busStop;
+    data.busLineID = id;
+    let response = null;
+    try{
+      response = await BusRouteService.handleAddNewStopToBusLine(data);
+      fetchBusLineDetails();
+    } catch(error)
+    {
+      response = error.message;
+    }
+    triggerToast(response)
+  } 
+
 
   async function handleCreateRoute(dto) {
     let response = null;
@@ -104,11 +128,21 @@ const BusLineEdit = () => {
             onClick={handleRouteOpenModal}
             label={"Dodaj trase"}
           />
+          <RegisterButton
+            onClick={handleOpenAddStopModal}
+            label={"Dodaj przystanek"}
+          />
           <CreateRouteModal
             onClose={handleRouteCloseModal}
             isOpen={isRouteModalOpen}
             onSubmit={handleCreateRoute}
             busLineID={id}
+          />
+          <AddStopModal 
+          onClose={handleCloseAddStopModal}
+          isOpen={isAddStopOpen}
+          busLineID={id}
+          onSubmit={handleAddBusTop}
           />
         </ButtonPanel>
       </UpperPanel>

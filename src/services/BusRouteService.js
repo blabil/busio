@@ -283,6 +283,21 @@ const BusRouteService = {
     }
   },
 
+  fetchBusLineStops: async (id) =>{
+    try{
+      const response = await axios
+      .get(`${apiUrl}/busline/stops/${id}`, {
+        withCredentials: true,
+      })
+      return response.data;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+
+  },
+
   fetchBusLineByStop: async (id) =>{
     try{
       const response = await axios
@@ -352,6 +367,32 @@ const BusRouteService = {
         ToastService.prepareToastMessage(error.response.data.message)
       );
     }
+  },
+
+  fetchFirstLastStop: async(id, type) => {
+    try{
+      const response = await axios.get(`${apiUrl}/busline/stops/fl/${id}`, {withCredentials: true});
+      return response.data;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  handleAddNewStopToBusLine: async (data) => {
+    try{
+      const response = await axios.post(
+          `${apiUrl}/busline/addstop`,
+          data,
+          { withCredentials: true }
+        )
+      return response.data.message;
+  } catch(error) {
+      throw new Error(
+          ToastService.prepareToastMessage(error.response.data.message)
+        );
+  }
   }
 };
 export default BusRouteService;

@@ -23,6 +23,7 @@ export { default as InfoBreakDownModal } from "./Modals/InfoBreakDownModal";
 export { default as InfoUserModal } from "./Modals/InfoUserModal";
 export { default as AssignDriverRouteModal} from './Modals/AssignDriverRouteModal'
 export { default as AssignBusRouteModal} from './Modals/AssignBusRouteModal';
+export { default as AddStopModal } from './Modals/AddStopModal';
 
 //buttons
 export { default as RegisterButton } from "./Buttons/RegisterButton";

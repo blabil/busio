@@ -46,8 +46,6 @@ const RegisterBusLine = () => {
       nowyCzas[index].time = "";
       nowyCzas[index - 1].time = "";
     }
-    console.log(index + "<index  length>" + pola.length);
-
     setPola(nowePola);
   };
 
