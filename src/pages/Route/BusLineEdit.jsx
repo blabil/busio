@@ -18,6 +18,7 @@ import {
 } from "../../components";
 import { Link, useParams } from "react-router-dom";
 import BusRouteService from "../../services/BusRouteService";
+import { AiFillDelete } from 'react-icons/ai'
 
 const BusLineEdit = () => {
   const { id } = useParams();
@@ -54,7 +55,20 @@ const BusLineEdit = () => {
       response = error.message;
     }
     triggerToast(response)
-  } 
+  }
+
+  const handleDeleteStop = async (busStop) =>
+  {
+    let response = null;
+    try{
+      response = await BusRouteService.handleDeleteStopFromBusLine(busStop, id);
+      fetchBusLineDetails();
+    } catch (error)
+    {
+      response = error.message;
+    }
+    triggerToast(response);
+  }
 
 
   async function handleCreateRoute(dto) {
@@ -157,11 +171,17 @@ const BusLineEdit = () => {
                   <th scope="col" className="px-4 py-4 text-center">
                     START
                   </th>
+                  <th scope="col" className="px-2 py-2 text-center">
+    
+                  </th>
                   <th scope="col" className="px-4 py-4 text-center">
                     CZAS
                   </th>
                   <th scope="col" className="px-4 py-4 text-center">
                     CEL
+                  </th>
+                  <th scope="col" className="px-2 py-2 text-center">
+    
                   </th>
                 </tr>
               </thead>
@@ -178,6 +198,11 @@ const BusLineEdit = () => {
                       />
                     </td>
                     <td className="px-6 py-4 text-center">
+                      <button onClick={() => handleDeleteStop(connection.busStopFromID)}>
+                        <AiFillDelete/>
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 text-center">
                       <span className="min-w-3  /6 bg-green-500 font-bold text-white text-center py-1 px-2 my-2 text-xs rounded">
                         {connection.time} min.
                       </span>
@@ -187,6 +212,11 @@ const BusLineEdit = () => {
                         label={connection.busStopToAddress}
                         path={`/busstop/edit/${connection.busStopToID}`}
                       />
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <button onClick={() => handleDeleteStop(connection.busStopToID)}>
+                        <AiFillDelete/>
+                      </button>
                     </td>
                   </tr>
                 ))}

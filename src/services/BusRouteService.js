@@ -393,6 +393,30 @@ const BusRouteService = {
           ToastService.prepareToastMessage(error.response.data.message)
         );
   }
+  },
+  
+  handleDeleteStopFromBusLine: async (busStop, busLine) => {
+    try{
+      const response = await axios.delete(`${apiUrl}/busline/stop/${busStop}/${busLine}`, 
+      {withCredentials: true})
+      return response.data.message;
+    } catch(error)
+    {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  handleDeleteStop: async (stopID) => {
+    try{
+      const response = await axios.delete(`${apiUrl}/busstop/${stopID}`, {withCredentials: true});
+      return response.data.message;
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   }
 };
 export default BusRouteService;

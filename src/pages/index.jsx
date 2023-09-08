@@ -23,4 +23,5 @@ export { default as UserType } from './User/UserType';
 export { default as UserListProblems } from './User/UserListProblems';
 export { default as UserListModify } from './User/UserListModify';
 export { default as UserListReview } from './User/UserListReview';
-export {default as RouteList } from './Route/RouteList';
+export { default as RouteList } from './Route/RouteList';
+export { default as StopList } from './Route/StopList';

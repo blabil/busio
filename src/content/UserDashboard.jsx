@@ -24,6 +24,7 @@ import {
   UserListModify,
   UserListReview,
   RouteList,
+  StopList,
 } from "../pages";
 import "../App.css";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -96,6 +97,7 @@ const UserDashboard = () => {
 
                 {/* Linia Autobusowa */}
                 <Route path="/busline/list" element={<BusLineList />} />
+                <Route path="/busstop/list" element={<StopList />} />
                 <Route path="/busline/register" element={<BusLineRegister />} />
                 <Route path="/busline/edit/:id" element={<BusLineEdit />} />
                 <Route path="/busstop/edit/:id" element={<BusStopEdit />} />

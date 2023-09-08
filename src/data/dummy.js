@@ -27,21 +27,6 @@ export const links = [
     ],
   },
   {
-    title: 'Zapasy',
-    links: [
-      {
-        name: 'Paliwo',
-        path: 'informacje',
-        icon: <FaInfo />,
-      },
-      {
-        name: 'Części',
-        path: 'pojazdITrasa',
-        icon: <FaCaravan />,
-      },
-    ],
-  },
-  {
     title: 'Linie Autobusowe',
     links: [
       {
@@ -50,18 +35,13 @@ export const links = [
         icon: <FaInfo />,
       },
       {
-        name: 'Autobusy',
-        path: 'pojazdITrasa',
-        icon: <FaCaravan />,
+        name: 'Rejestracja Linii',
+        path: 'busline/list',
+        icon: <FaInfo />,
       },
       {
-        name: 'Stwórz',
-        path: 'kontrola',
-        icon: <FaCheck />,
-      },
-      {
-        name: 'Kontrola',
-        path: 'kontrola',
+        name: 'Przystanki',
+        path: 'busstop/list',
         icon: <FaCheck />,
       },
     ],
