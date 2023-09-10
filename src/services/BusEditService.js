@@ -7,6 +7,7 @@ const BusEditService = {
     ISSUE: `${apiUrl}/issue`,
     BREAKDOWN: `${apiUrl}/breakdown`,
     REVIEW: `${apiUrl}/review`,
+    INSURANCE: `${apiUrl}/insurance`,
   },
 
   getEndpointByTitle(title) {
@@ -138,6 +139,37 @@ const BusEditService = {
       bus_id: bus_id,
     };
     return issueDto;
+  },
+
+
+  /**
+   * @typedef     { Object } Insurance
+   * @property    { string } company
+   * @property    { number } price
+   * @property    { string | undefined } createdAt
+   * @property    { string | undefined } expiresAt
+   * @property    { string } bus_id
+   */
+
+  /**
+   * Create a Insurance DTO.
+   * @returns     { Insurance } The Insurance DTO.
+   * @param       { Insurance } company - Firma ubezpieczająca
+   * @param       { Insurance } state - Cena ubezpieczenia
+   * @param       { Insurance } createdAt - Data wystawienia
+   * @param       { Insurance } expiresAt - Data wygaśnięcia
+   * @param       { Insurance } bus_id - ID busa
+   */
+
+  returnInsuranceDto(company, price, createdAt, expiresAt, bus_id) {
+    const insuranceDto = {
+      company: company,
+      price: price,
+      createdAt: createdAt,
+      expiresAt: expiresAt,
+      bus_id: bus_id
+    };
+    return insuranceDto;
   },
 
   /**

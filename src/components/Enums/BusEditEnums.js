@@ -1,7 +1,8 @@
 const RegistrationType = {
     ISSUE: 'ISSUE',
     BREAKDOWN: 'BREAKDOWN',
-    REVIEW: 'REVIEW'
+    REVIEW: 'REVIEW',
+    INSURANCE: 'INSURANCE'
   };
 
   export default RegistrationType; 

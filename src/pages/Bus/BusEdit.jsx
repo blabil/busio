@@ -27,6 +27,7 @@ import {
   TwoPartPanel,
   UpperPanel,
   NavigateHref,
+  InsuranceModal,
 } from "../../components";
 import { BusEditService, UserService } from "../../services";
 import createdAt from "../../data/createdAt.png";
@@ -81,6 +82,16 @@ const BusEdit = () => {
       setReviews(response.busReviews);
     }
   };
+
+  const [isInsuranceOpen, setIsInsuranceOpen] = useState(false);
+  function handleOpenInsurance() {
+    setIsInsuranceOpen(true);
+  }
+  function handleCloseInsurance() {
+    setIsInsuranceOpen(false);
+  }
+
+
 
   const [isBreakDownOpen, setIsBreakDownOpen] = useState(false);
   function handleOpenBreakDown() {
@@ -160,9 +171,7 @@ const BusEdit = () => {
       response = error.message;
     }
     triggerToast(response);
-    if (type === "ISSUE") fetchDetails(type);
-    if (type === "BREAKDOWN") fetchDetails(type);
-    if (type === "REVIEW") fetchDetails(type);
+    fetchDetails(type);
   }
 
   const fetchBusDetails = useCallback(async () => {
@@ -240,6 +249,16 @@ const BusEdit = () => {
             onClose={handleCloseBreakDown}
             onSubmit={handleRegister}
             bus_id={id}
+          />
+          <RegisterButton
+            onClick={handleOpenInsurance}
+            label={"Dodaj Ubezpiecznie"}
+          />
+          <InsuranceModal 
+            onClose={handleCloseInsurance}
+            isOpen={isInsuranceOpen}
+            busID={id}
+            onSubmit={handleRegister}
           />
         </ButtonPanel>
       </UpperPanel>

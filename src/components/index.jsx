@@ -24,6 +24,7 @@ export { default as InfoUserModal } from "./Modals/InfoUserModal";
 export { default as AssignDriverRouteModal} from './Modals/AssignDriverRouteModal'
 export { default as AssignBusRouteModal} from './Modals/AssignBusRouteModal';
 export { default as AddStopModal } from './Modals/AddStopModal';
+export { default as InsuranceModal } from './Modals/InsuranceModal';
 
 //buttons
 export { default as RegisterButton } from "./Buttons/RegisterButton";
