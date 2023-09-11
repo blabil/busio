@@ -6,7 +6,11 @@ const DriverList = () => {
   const [workerList, setWorkerList] = useState([]);
 
   const fetchWorkers = useCallback(async () => {
-    setWorkerList(await UserService.getWorkers());
+    try{
+      setWorkerList(await UserService.getWorkers());
+    } catch(error) {
+      console.log(error.message)
+    }
   }, []);
 
   useEffect(() => {

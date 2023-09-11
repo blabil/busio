@@ -8,6 +8,7 @@ export { default as Line } from "./charts/Line";
 export { default as ChartsHeader } from "./ChartsHeader";
 export { default as AdminSidebar } from "./Sidebars/AdminSidebar";
 export { default as DriverSidebar } from "./Sidebars/DriverSidebar";
+export { default as MechanicSidebar } from "./Sidebars/MechanicSidebar";
 export { default as DeleteModal } from "./DeleteModal";
 export { default as RegisterBusStopModal } from "./Modals/RegisterBusStopModal";
 export { default as CreateRouteModal } from "./Modals/CreateRouteModal";

@@ -3,14 +3,11 @@ import { Link, NavLink} from 'react-router-dom';
 import { FaBus } from 'react-icons/fa';
 import { MdOutlineCancel} from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-
 import { driverLinks } from '../../data/dummy';
 import { useStateContext } from '../../contexts/ContextProvider';
-import { useLoginContext } from '../../contexts/LoginContextProvider';
 
 const Sidebar = () => {
   const {activeMenu, setActiveMenu, screenSize} = useStateContext();
-  const {logout} = useLoginContext();
 
   const handleCloseSideBar = () => 
   {

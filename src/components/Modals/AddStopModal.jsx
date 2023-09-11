@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ReactModal from "react-modal";
 import { BusRouteService } from "../../services/";
 import { ModalContainer, ModalInput, ModalTitle, SendButton } from "..";
@@ -13,30 +13,20 @@ const BreakDownModal = ({ isOpen, onClose, onSubmit, busLineID }) => {
   const [busStop, setBusStop] = useState();
   
 
-  const fetchStops = async () => {
+  const fetchStops = useCallback(async () => {
     await BusRouteService.fetchStops().then(async (stops) => {
       setStops(stops);
       if (busLineID) {
         await BusRouteService.fetchBusLineStops(busLineID).then(
           async (response) => {
-            let temp = [];
-            response.map((stop) => {
-              temp.push(stop.busStop);
-            });
+            let temp = response.map((stop) => stop.busStop);
             setBusLineStops(temp);
             setFirstLast(await BusRouteService.fetchFirstLastStop(busLineID));
           }
         );
       }
     });
-  };
-
-  const deleteAssinged = () => {
-    const temp = stops.filter((stop) => {
-      return !busLineStops.some((assinged) => assinged.id === stop.id);
-    });
-    return temp;
-  };
+  },[busLineID]);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -65,12 +55,18 @@ const BreakDownModal = ({ isOpen, onClose, onSubmit, busLineID }) => {
     setDataChange(newDataChange);
   };
   useEffect(() => {
+    const deleteAssinged = () => {
+      const temp = stops.filter((stop) => {
+        return !busLineStops.some((assinged) => assinged.id === stop.id);
+      });
+      return temp;
+    };
     setStops(deleteAssinged());
-  }, [firstLast, busLineStops]);
+  }, [busLineStops, stops]);
 
   useEffect(() => {
     fetchStops();
-  }, [isOpen]);
+  }, [isOpen, fetchStops]);
 
   return (
     <ReactModal

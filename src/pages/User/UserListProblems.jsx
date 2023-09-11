@@ -37,13 +37,18 @@ const UserListProblems = () => {
   }
 
   const fetchUserData = useCallback(async () => {
-    const response = await UserService.fetchUserProblemsData(
-      id,
-      type.toUpperCase()
-    );
-    const user = await UserService.handleUserDetails(id);
-    setData(response.data);
-    setUser(user);
+    try{
+      const response = await UserService.fetchUserProblemsData(
+        id,
+        type.toUpperCase()
+      );
+      const user = await UserService.handleUserDetails(id);
+      setData(response.data);
+      setUser(user);
+    } catch(error)
+    {
+      console.log(error.message);
+    }
   }, [id, type]);
 
   useEffect(() => {

@@ -1,51 +1,39 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { Link, useParams } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { UserService } from "../../services";
+import React, { useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { UserService } from '../../services';
 
-const AdminEdit = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [phone, setPhone] = useState("");
+const Register = () => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
+  const [phone, setPhone] = useState('');
+  const [role, setRole] = useState('');
   const [address, setAddress] = useState("");
-  const [role, setRole] = useState("");
 
-  const { id } = useParams();
-
-  const fetchUserDetail = useCallback (async () => {
-    try {
-      const response = await UserService.adminFetchUser(id);
-      const fullNameSepareted = response.profile.fullName.split(" ");
-      setName(fullNameSepareted[0]);
-      setSurname(fullNameSepareted[1]);
-      setEmail(response.email);
-      setPhone(response.profile.phone);
-      setRole(response.role);
-      setAddress(response.profile.address);
-    } catch (error) {
-      triggerToast(error.message);
-    }
-  },[id]);
-
-  useEffect(() => {
-    fetchUserDetail();
-  }, [fetchUserDetail]);
-
-  const handleEdit = async () => {
+  const handleRegister = async () => {
     const fullName = name + " " + surname;
     const userDto = UserService.returnUserDto(email, fullName, phone, password, role, address);
     let response = null;
     try{
-      response = await UserService.adminEditUser(userDto, id);
-    } catch(error)
-    {
+      response = await UserService.handleRegisterUser(userDto);
+      resetForm();
+    } catch(error) {
       response = error.message;
     }
     triggerToast(response);
   };
+
+  const resetForm = () =>{
+    setAddress('');
+    setEmail('');
+    setPassword('');
+    setSurname('');
+    setName('');
+    setPhone('');
+  }
 
   const triggerToast = (message) => {
     toast(message, {
@@ -54,6 +42,7 @@ const AdminEdit = () => {
       position: toast.POSITION.BOTTOM_RIGHT,
     });
   };
+
   return (
     <section className=" py-1 bg-blueGray-50">
       <div className="w-full lg:w-8/12 px-4 mx-auto mt-6">
@@ -61,19 +50,11 @@ const AdminEdit = () => {
           <div className="rounded-t bg-white mb-0 px-6 py-6">
             <div className="text-center flex justify-between">
               <h6 className="text-blueGray-700 text-xl font-bold">
-                Edytowanie użytkownika
+                Dodawanie użytkownika
               </h6>
               <div className="text-center flex justify-between">
-                <Link to={`/`}>
-                  <button
-                    className="bg-sky-400 text-white font-bold uppercase text-xs px-4 py-2 rounded hover:bg-teal-500 ease-linear transition-all duration-150 mx-2"
-                    type="button"
-                  >
-                    Powrót
-                  </button>
-                </Link>
                 <button
-                  onClick={handleEdit}
+                  onClick={handleRegister}
                   className="bg-sky-400 text-white font-bold uppercase text-xs px-4 py-2 rounded hover:bg-teal-500 ease-linear transition-all duration-150 mx-2"
                   type="button"
                 >
@@ -218,7 +199,7 @@ const AdminEdit = () => {
       </div>
       <ToastContainer />
     </section>
-  );
-};
+  )
+}
 
-export default AdminEdit;
+export default Register

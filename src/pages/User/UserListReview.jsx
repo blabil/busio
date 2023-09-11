@@ -20,10 +20,15 @@ const UserListReview = () => {
   const [user, setUser] = useState({});
 
   const fetchUserData = useCallback(async () => {
-    const response = await UserService.fetchUserReviewsData(id);
-    const user = await UserService.handleUserDetails(id);
-    setData(response.data);
-    setUser(user);
+    try{
+      const response = await UserService.fetchUserReviewsData(id);
+      const user = await UserService.handleUserDetails(id);
+      setData(response.data);
+      setUser(user);
+    } catch(error)
+    {
+      console.log(error.message);
+    }
   }, [id]);
 
   useEffect(() => {

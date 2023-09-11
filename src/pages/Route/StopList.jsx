@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react'
+import React, { useEffect, useState, useCallback} from 'react'
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,7 +20,7 @@ const StopList = () => {
         triggerToast(response);
     } 
 
-    const fetchStops = async () =>{
+    const fetchStops = useCallback (async () =>{
         try{
             const response = await BusRouteService.fetchStops()
             setStops(response);
@@ -28,7 +28,7 @@ const StopList = () => {
         {
             triggerToast(error.message);
         }
-    }
+    },[]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     function handleOpenModal() {
@@ -51,7 +51,7 @@ const StopList = () => {
 
     useEffect(() => {
         fetchStops();
-    }, [])
+    }, [fetchStops])
     
     const triggerToast = (message) => {
         toast(message, {

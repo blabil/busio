@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, Navigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import {
   BasicHeader,
   BasicPanel,
@@ -44,32 +44,32 @@ const BusStopEdit = () => {
     triggerToast(response);
   }
 
-  const fetchStop = async () => {
+  const fetchStop = useCallback(async () => {
     try {
       const response = await BusRouteService.fetchBusStop(id);
       setStop(response);
     } catch (error) {
       triggerToast(error.message);
     }
-  };
+  },[id]);
 
-  const fetchBusLine = async () => {
+  const fetchBusLine = useCallback(async () => {
     try {
       const response = await BusRouteService.fetchBusLineByStop(id);
       setBusLines(response);
     } catch (error) {
       triggerToast(error.message);
     }
-  };
+  },[id]);
 
-  const fetchStopConnections = async () => {
+  const fetchStopConnections = useCallback(async () => {
     try {
       const response = await BusRouteService.fetchStopConnections(id);
       setStopConnections(response);
     } catch (error) {
       triggerToast(error.message);
     }
-  };
+  },[id]);
 
   const handleChangeTime = async (index, e) => {
     const connection = [...stopConnections];
@@ -105,7 +105,7 @@ const BusStopEdit = () => {
     fetchBusLine();
     fetchStop();
     fetchStopConnections();
-  }, [id]);
+  }, [fetchBusLine, fetchStop, fetchStopConnections]);
 
   return (
     <div className="flex flex-col gap-3 h-screen">

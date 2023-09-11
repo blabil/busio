@@ -3,35 +3,21 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
-import { Navbar, Sidebar } from "../components";
+import { MechanicSidebar, Navbar } from "../components";
 import {
-  BusLineList,
-  UserRegister,
-  UserList,
   BusEdit,
   BusList,
   BusRegister,
-  BusLineRegister,
-  BusLineEdit,
-  BusStopEdit,
-  BusRouteEdit,
-  UserWelcome,
   BusIssuesList,
   BusBreakDownList,
   BusReviewList,
-  UserType,
-  UserListProblems,
-  UserListModify,
-  UserListReview,
-  RouteList,
-  StopList,
-  InsuranceList,
+  MechanicWelcome,
 } from "../pages";
 import "../App.css";
 import { useStateContext } from "../contexts/ContextProvider";
 
-const UserDashboard = () => {
-  const { activeMenu } = useStateContext();
+const MechanicDashboard = () => {
+    const { activeMenu } = useStateContext();
 
   return (
     <div>
@@ -50,11 +36,11 @@ const UserDashboard = () => {
           </div>
           {activeMenu ? (
             <div className="w-64 fixed sidebar dark:bg-secondary-dark-bg bg-white">
-              <Sidebar />
+              <MechanicSidebar />
             </div>
           ) : (
             <div className="w-0 dark:bg-secondary-dark-bg">
-              <Sidebar />
+              <MechanicSidebar />
             </div>
           )}
 
@@ -69,7 +55,7 @@ const UserDashboard = () => {
             <div>
               <Routes>
                 {/* Głwówna */}
-                <Route path="/" element={<UserWelcome />} />
+                <Route path="/" element={<MechanicWelcome />} />
 
                 {/* Bus */}
                 <Route path="/bus/list" element={<BusList />} />
@@ -87,29 +73,8 @@ const UserDashboard = () => {
                   path="/bus/edit/review/list/:id"
                   element={<BusReviewList />}
                 />
-                <Route
-                  path="/bus/edit/insurance/list/:id"
-                  element={<InsuranceList />}
-                />
 
-                {/* Kierowca */}
-                <Route path="/user/list" element={<UserList />} />
-                <Route path="/user/register" element={<UserRegister />} />
-                <Route path="/user/type/:id" element={<UserType />} />
-                <Route path="/user/list/problems/:id/:type" element={<UserListProblems />} />
-                <Route path="/user/list/modify/:id/:type" element={<UserListModify />} />
-                <Route path="/user/list/review/:id" element={<UserListReview />} />
-
-                {/* Linia Autobusowa */}
-                <Route path="/busline/list" element={<BusLineList />} />
-                <Route path="/busstop/list" element={<StopList />} />
-                <Route path="/busline/register" element={<BusLineRegister />} />
-                <Route path="/busline/edit/:id" element={<BusLineEdit />} />
-                <Route path="/busstop/edit/:id" element={<BusStopEdit />} />
-                <Route path="/busroute/edit/:id" element={<BusRouteEdit />} />
-
-                <Route path="/route/list/:id/:type" element={<RouteList />} />
-                {/*<Route path="*" element={<UserWelcome />} />*/}
+                <Route path="*" element={<MechanicWelcome/>} />
               </Routes>
             </div>
           </div>
@@ -117,6 +82,6 @@ const UserDashboard = () => {
       </BrowserRouter>
     </div>
   );
-};
+}
 
-export default UserDashboard;
+export default MechanicDashboard

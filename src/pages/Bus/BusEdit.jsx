@@ -34,8 +34,10 @@ import createdAt from "../../data/createdAt.png";
 import expiresAt from "../../data/expiresAt.png";
 import positive from "../../data/positive.png";
 import actual from "../../data/actual.png";
+import { useLoginContext } from '../../contexts/LoginContextProvider';
 
 const BusEdit = () => {
+  const { userRole } = useLoginContext();
   const { id } = useParams();
   const [bus, setBus] = useState({});
   const [busProfile, setBusProfile] = useState([]);
@@ -44,6 +46,7 @@ const BusEdit = () => {
   const [reviews, setReviews] = useState([]);
   const [userToModal, setUserToModal] = useState({});
   const [routeList, setRouteList] = useState([]);
+  const [insuranceList, setInsuranceList] = useState([]);
 
   const returnTypeValue = (type) => {
     switch (type) {
@@ -182,6 +185,7 @@ const BusEdit = () => {
     setBreakDowns(response.busBreakDowns);
     setReviews(response.busReviews);
     setRouteList(response.busRoutes);
+    setInsuranceList(response.busInsurance);
   }, [id]);
 
   useEffect(() => {
@@ -250,6 +254,8 @@ const BusEdit = () => {
             onSubmit={handleRegister}
             bus_id={id}
           />
+          {userRole === "USER" ? (
+            <div>
           <RegisterButton
             onClick={handleOpenInsurance}
             label={"Dodaj Ubezpiecznie"}
@@ -260,6 +266,8 @@ const BusEdit = () => {
             busID={id}
             onSubmit={handleRegister}
           />
+          </div>
+          ) : null}
         </ButtonPanel>
       </UpperPanel>
 
@@ -524,11 +532,87 @@ const BusEdit = () => {
               data={activeReview}
             />
           </BasicPanel>
-
+          {userRole === "USER" ? (
           <BasicPanel>
-            <PanelHeader label={"ubezpieczenie"} />
+            <PanelHeader label={"ubezpieczenie"} path={`/bus/edit/insurance/list/${id}`} />
+            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+              <thead className="text-xs text-gray-700 uppercase border-1 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                  <th scope="col" className="px-4 py-4">
+                    ID
+                  </th>
+                  <th scope="col" className="px-4 py-4 text-center">
+                    FIRMA
+                  </th>
+                  <th scope="col" className="px-4 py-4 text-center">
+                    CENA
+                  </th>
+                  <th scope="col" className="flex-1 px-4 py-4">
+                    <div className="flex items-center justify-center">
+                      <TooltipComponent content="Wystawiono" position="Top">
+                        <img
+                          src={createdAt}
+                          alt="CreatedAt"
+                          className="h-4 w-4"
+                        />
+                      </TooltipComponent>
+                    </div>
+                  </th>
+                  <th scope="col" className="flex-1 px-4 py-4">
+                    <div className="flex items-center justify-center">
+                      <TooltipComponent content="Wystawiono" position="Top">
+                        <img
+                          src={expiresAt}
+                          alt="CreatedAt"
+                          className="h-4 w-4"
+                        />
+                      </TooltipComponent>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {insuranceList
+                  .slice(0, 5)
+                  .map((insurance) => (
+                    <tr
+                      key={insurance.id}
+                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    >
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        {insurance.id}
+                      </th>
+                      <td className="px-6 py-4 text-center">
+                        <h1 className="text-bold">{insurance.company}</h1>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <h1 className="text-bold">{insurance.price} zł</h1>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        {new Date(insurance.createdAt).toLocaleDateString("pl-PL", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        {new Date(insurance.expiresAt).toLocaleDateString("pl-PL", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </BasicPanel>
+          ): null}
         </TwoPartPanel>
+        {userRole === "USER" ? (
         <TwoPartPanel>
           <BasicFullPanel>
             <PanelHeader label={"TRASY BUSA"} path={`/route/list/${id}/bus`}/>
@@ -590,6 +674,7 @@ const BusEdit = () => {
             </table>
           </BasicFullPanel>
         </TwoPartPanel>
+        ): null}
       </BottomPanel>
       <ToastContainer />
     </div>

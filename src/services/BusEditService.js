@@ -259,6 +259,7 @@ const BusEditService = {
       busBreakDowns: response.data.busBreakDowns,
       busReviews: response.data.busReview,
       busRoutes: response.data.busLineRoute,
+      busInsurance: response.data.BusInsurance
     };
   },
 
@@ -339,6 +340,13 @@ const BusEditService = {
       withCredentials: true,
     });
     return { busReviews: response.data.reviews, bus: response.data.bus };
+  },
+
+  handleInsuranceDetails: async (id) => {
+    const response = await axios.get(`${apiUrl}/insurance/bus/${id}`, {
+      withCredentials: true,
+    });
+    return { busInsurances: response.data.insurances, bus: response.data.bus };
   },
 
   handleIssuesDetails: async (id) => {

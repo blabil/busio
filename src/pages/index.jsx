@@ -1,5 +1,5 @@
 export { default as Login } from './Login';
-export { default as Register} from './Register';
+export { default as AdminRegister } from './Admin/AdminRegister';
 export { default as AdminList} from './Admin/AdminList';
 export { default as AdminEdit} from './Admin/AdminEdit';
 export { default as BusList} from './Bus/BusList';
@@ -25,3 +25,5 @@ export { default as UserListModify } from './User/UserListModify';
 export { default as UserListReview } from './User/UserListReview';
 export { default as RouteList } from './Route/RouteList';
 export { default as StopList } from './Route/StopList';
+export {default as InsuranceList } from './Bus/InsuranceList';
+export {default as MechanicWelcome } from './User/MechanicWelcome';

@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 
 import {Navbar, AdminSidebar, } from '../components';
-import { Register, AdminList, AdminEdit } from '../pages';
+import { AdminRegister, AdminList, AdminEdit } from '../pages';
 import '../App.css';
 import { useStateContext } from '../contexts/ContextProvider';
 
@@ -50,7 +50,7 @@ const AdminDashboard = () => {
                 <Routes>
                     {/* test */}
                     <Route  path='/' element={(<AdminList/>)}/>
-                    <Route  path='/register' element={(<Register/>)}/>
+                    <Route  path='/register' element={(<AdminRegister/>)}/>
                     <Route  path='/edit/:id' element={(<AdminEdit/>)}/>
                 </Routes>
             </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FiShoppingBag } from 'react-icons/fi';
-import { FaBook, FaGavel, FaInfo, FaCheck, FaCaravan } from 'react-icons/fa';
+import { FaBook, FaGavel, FaInfo, FaCheck } from 'react-icons/fa';
 
 
 
@@ -84,6 +84,24 @@ export const driverLinks = [
         name: 'Informacje',
         path: 'stanPojazdu',
         icon: <FiShoppingBag />,
+      },
+    ],
+  },
+];
+
+export const mechanicLinks = [
+  {
+    title: 'Flota',
+    links: [
+      {
+        name: 'Pojazdy',
+        path: 'bus/list',
+        icon: <FaBook />,
+      },
+      {
+        name: 'Rejestracja pojazdu',
+        path: 'bus/register',
+        icon: <FaGavel />,
       },
     ],
   },

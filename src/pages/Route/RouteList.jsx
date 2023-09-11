@@ -62,7 +62,7 @@ const RouteList = () => {
     } catch (error) {
       triggerToast(error.message);
     }
-  }, [id]);
+  }, [id, type]);
 
   const fetchRoutes = useCallback(async () => {
     try {

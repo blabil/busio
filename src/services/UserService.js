@@ -32,17 +32,30 @@ const UserService = {
   },
 
   handleUserDetails: async (id) => {
-    const response = await axios.get(`${apiUrl}/users/${id}`, {
-      withCredentials: true,
-    });
-    return response.data;
+    try{
+      const response = await axios.get(`${apiUrl}/users/${id}`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch(error)
+    {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 
   handleWorkerDetails: async (id) => {
-    const response = await axios.get(`${apiUrl}/worker/${id}`, {
-      withCredentials: true,
-    });
-    return response.data;
+    try{
+      const response = await axios.get(`${apiUrl}/worker/${id}`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 
   getWorkers: async () => {
@@ -116,7 +129,60 @@ const UserService = {
     const response = await axios.get(`${apiUrl}/review/user/${id}`, 
     { withCredentials: true });
     return response.data;
-  }
+  },
+
+  adminDeleteUser: async (uuidDelete) => {
+    try {
+      const response = await axios.delete(`${apiUrl}/users/${uuidDelete}`,{ withCredentials: true })
+      return response.data.message;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  adminFetchUsers: async () => {
+    try{
+      const response = await axios.get(`${apiUrl}/users`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch(error){
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  adminFetchUser: async (id) => {
+    try{
+      const response = await axios.get(`${apiUrl}/users/${id}`, {withCredentials : true})
+      return response.data;
+    } catch(error){
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
+  adminEditUser: async (dto, id) => {
+
+    try{
+      const response = await axios
+      .patch(
+        `${apiUrl}/users/${id}`,
+        dto,
+        { withCredentials: true }
+      );
+      return response.data.message;
+    } catch(error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
+
 };
 
 export default UserService;

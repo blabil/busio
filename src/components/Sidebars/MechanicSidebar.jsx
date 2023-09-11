@@ -3,7 +3,7 @@ import { Link, NavLink} from 'react-router-dom';
 import { FaBus } from 'react-icons/fa';
 import { MdOutlineCancel} from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { adminLinks } from '../../data/dummy';
+import { mechanicLinks } from '../../data/dummy';
 import { useStateContext } from '../../contexts/ContextProvider';
 
 const Sidebar = () => {
@@ -24,7 +24,7 @@ const Sidebar = () => {
     <div className='ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10'>
       {activeMenu && (<>
         <div className="flex justify-between items-center">
-        <Link to='/' onClick={ { handleCloseSideBar } } className='items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900'>
+        <Link to='/' className='items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900'>
           <FaBus /> <span>Bus.IO</span >
           </Link>
 
@@ -37,7 +37,7 @@ const Sidebar = () => {
       </div>
       <div className="mt-10 ">
 
-            {adminLinks.map((item) => (
+            {mechanicLinks.map((item) => (
               <div key={item.title}>
                 <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
                   {item.title}
