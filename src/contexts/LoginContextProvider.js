@@ -33,7 +33,7 @@ export const LoginContextProvider = ({ children }) => {
     {
       const decodedToken = jwt_decode(response.data.token);
       const now = new Date();
-      const timeToExpire = 60 * 60 * 1000;
+      const timeToExpire = 60 * 60 * 24 * 7 * 1000;
       const expires = new Date(now.getTime() + timeToExpire);
       setTimeout(() => {
         logout();

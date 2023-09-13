@@ -1,5 +1,4 @@
 import React from 'react';
-import { FiShoppingBag } from 'react-icons/fi';
 import { FaBook, FaGavel, FaInfo, FaCheck } from 'react-icons/fa';
 
 
@@ -97,5 +96,5 @@ export const mechanicLinks = [
   },
 ];
 
-export const apiUrl = 'http://192.168.33.2:5000';
+export const apiUrl = 'http://localhost:5000';
 

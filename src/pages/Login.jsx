@@ -49,7 +49,6 @@ const Login = () => {
     >
         Zaloguj
     </button>
-              <a href="#" className="text-sm hover:underline">Zapomniałaś/eś hasła?</a>
             </div>
         </div>
         

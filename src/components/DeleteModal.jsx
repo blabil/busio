@@ -10,7 +10,7 @@ const DeleteModal = ({ isOpen, closeModal, handleDelete }) => {
       isOpen={isOpen}
       onRequestClose={closeModal}
       contentLabel="Potwierdzenie usunięcia"
-      appElement={document.getElementById('root')} // tu podaj id twojego elementu root
+      appElement={document.getElementById('root')} 
     >
         
     <div className="relative w-full max-w-md max-h-full">

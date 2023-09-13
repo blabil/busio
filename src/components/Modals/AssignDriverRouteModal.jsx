@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import ReactModal from "react-modal";
 import { ModalContainer, ModalInput, ModalTitle, SendButton } from "..";
 import BusRouteService from "../../services/BusRouteService";
@@ -12,18 +12,18 @@ const AssignDriverRouteModal = ({ isOpen, onClose, onSubmit, routeID }) => {
     onClose();
   }
 
-  const fetchDriver = async () => {
+  const fetchDriver = useCallback(async () => {
     try {
       const response = await BusRouteService.fetchDrivers(routeID);
       setDriverList(response);
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [routeID]);
 
   useEffect(() => {
-    if (routeID) fetchDriver();
-  }, [routeID]);
+    fetchDriver();
+  }, [fetchDriver]);
 
   return (
     <ReactModal

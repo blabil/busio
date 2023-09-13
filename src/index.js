@@ -1,11 +1,9 @@
 import React from "react";
 import ReactDOM from 'react-dom';
-import { ContextProvider} from './contexts/ContextProvider';
-
-
 import './index.css';
 import App from './App';
-import { LoginContextProvider } from "./contexts/LoginContextProvider";
+import { ContextProvider} from './contexts/ContextProvider';
+import { LoginContextProvider } from './contexts/LoginContextProvider';
 
 
 ReactDOM.render(
