@@ -44,8 +44,13 @@ const InfoIssueModal = ({ onClose, isOpen, data, user, registration }) => {
   };
 
   const handleModifyIssueList = useCallback(async (id) => {
-    const response = await BusEditService.handleModifyIssuesList(id);
-    setModify(response);
+    try{
+      const response = await BusEditService.handleModifyIssuesList(id);
+      setModify(response);
+    } catch(error) {
+      console.log(error.message);
+    }
+    
   }, []);
 
   const triggerToast = (message) => {

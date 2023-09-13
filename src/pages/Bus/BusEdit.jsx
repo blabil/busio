@@ -34,7 +34,7 @@ import createdAt from "../../data/createdAt.png";
 import expiresAt from "../../data/expiresAt.png";
 import positive from "../../data/positive.png";
 import actual from "../../data/actual.png";
-import { useLoginContext } from '../../contexts/LoginContextProvider';
+import { useLoginContext } from "../../contexts/LoginContextProvider";
 
 const BusEdit = () => {
   const { userRole } = useLoginContext();
@@ -72,17 +72,25 @@ const BusEdit = () => {
   }
 
   const fetchDetails = async (type) => {
-    if (type === "ISSUE") {
-      const response = await BusEditService.handleIssuesDetails(id);
-      setIssues(response.busIssues);
-    }
-    if (type === "BREAKDOWN") {
-      const response = await BusEditService.handleBreakDownsDetails(id);
-      setBreakDowns(response.busBreakDowns);
-    }
-    if (type === "REVIEW") {
-      const response = await BusEditService.handleReviewsDetails(id);
-      setReviews(response.busReviews);
+    try {
+      if (type === "ISSUE") {
+        const response = await BusEditService.handleIssuesDetails(id);
+        setIssues(response.busIssues);
+      }
+      if (type === "BREAKDOWN") {
+        const response = await BusEditService.handleBreakDownsDetails(id);
+        setBreakDowns(response.busBreakDowns);
+      }
+      if (type === "REVIEW") {
+        const response = await BusEditService.handleReviewsDetails(id);
+        setReviews(response.busReviews);
+      }
+      if (type === "INSURANCE") {
+        const response = await BusEditService.handleInsuranceDetails(id);
+        setInsuranceList(response.busInsurances);
+      }
+    } catch (error) {
+      triggerToast(error.message);
     }
   };
 
@@ -93,8 +101,6 @@ const BusEdit = () => {
   function handleCloseInsurance() {
     setIsInsuranceOpen(false);
   }
-
-
 
   const [isBreakDownOpen, setIsBreakDownOpen] = useState(false);
   function handleOpenBreakDown() {
@@ -115,12 +121,14 @@ const BusEdit = () => {
   const [isReviewInfoOpen, setIsReviewInfo] = useState(false);
   const [activeReview, setActiveReview] = useState(null);
   async function handleOpenInfoReview(review) {
-    const user = await UserService.handleUserDetails(review.user_id);
-    setUserToModal(user);
     try {
+      const user = await UserService.handleUserDetails(review.user_id);
+      setUserToModal(user);
       setActiveReview(review);
       setIsReviewInfo(true);
-    } catch (error) {}
+    } catch (error) {
+      triggerToast(error.message);
+    }
   }
   function handleCloseInfoReview() {
     setIsReviewInfo(false);
@@ -131,12 +139,14 @@ const BusEdit = () => {
   const [activeIssue, setActiveIssue] = useState(null);
 
   async function handleOpenInfoIssue(issue) {
-    const user = await UserService.handleUserDetails(issue.user_id);
-    setUserToModal(user);
     try {
+      const user = await UserService.handleUserDetails(issue.user_id);
+      setUserToModal(user);
       setActiveIssue(issue);
       setIsIssueInfo(true);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error.message);
+    }
   }
   function handleCloseInfoIssue() {
     setIsIssueInfo(false);
@@ -148,9 +158,9 @@ const BusEdit = () => {
   const [activeBreakDown, setActiveBreakDown] = useState(null);
 
   async function handleOpenInfoBreakDown(breakDown) {
-    const user = await UserService.handleUserDetails(breakDown.user_id);
-    setUserToModal(user);
     try {
+      const user = await UserService.handleUserDetails(breakDown.user_id);
+      setUserToModal(user);
       setActiveBreakDown(breakDown);
       setIsBreakDownInfo(true);
     } catch (error) {}
@@ -178,14 +188,18 @@ const BusEdit = () => {
   }
 
   const fetchBusDetails = useCallback(async () => {
-    const response = await BusEditService.handleBusDetails(id);
-    setBus(response.bus);
-    setBusProfile(response.busProfile);
-    setIssues(response.busIssues);
-    setBreakDowns(response.busBreakDowns);
-    setReviews(response.busReviews);
-    setRouteList(response.busRoutes);
-    setInsuranceList(response.busInsurance);
+    try {
+      const response = await BusEditService.handleBusDetails(id);
+      setBus(response.bus);
+      setBusProfile(response.busProfile);
+      setIssues(response.busIssues);
+      setBreakDowns(response.busBreakDowns);
+      setReviews(response.busReviews);
+      setRouteList(response.busRoutes);
+      setInsuranceList(response.busInsurance);
+    } catch (error) {
+      triggerToast(error);
+    }
   }, [id]);
 
   useEffect(() => {
@@ -256,17 +270,17 @@ const BusEdit = () => {
           />
           {userRole === "USER" ? (
             <div>
-          <RegisterButton
-            onClick={handleOpenInsurance}
-            label={"Dodaj Ubezpiecznie"}
-          />
-          <InsuranceModal 
-            onClose={handleCloseInsurance}
-            isOpen={isInsuranceOpen}
-            busID={id}
-            onSubmit={handleRegister}
-          />
-          </div>
+              <RegisterButton
+                onClick={handleOpenInsurance}
+                label={"Dodaj Ubezpiecznie"}
+              />
+              <InsuranceModal
+                onClose={handleCloseInsurance}
+                isOpen={isInsuranceOpen}
+                busID={id}
+                onSubmit={handleRegister}
+              />
+            </div>
           ) : null}
         </ButtonPanel>
       </UpperPanel>
@@ -533,48 +547,49 @@ const BusEdit = () => {
             />
           </BasicPanel>
           {userRole === "USER" ? (
-          <BasicPanel>
-            <PanelHeader label={"ubezpieczenie"} path={`/bus/edit/insurance/list/${id}`} />
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase border-1 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="px-4 py-4">
-                    ID
-                  </th>
-                  <th scope="col" className="px-4 py-4 text-center">
-                    FIRMA
-                  </th>
-                  <th scope="col" className="px-4 py-4 text-center">
-                    CENA
-                  </th>
-                  <th scope="col" className="flex-1 px-4 py-4">
-                    <div className="flex items-center justify-center">
-                      <TooltipComponent content="Wystawiono" position="Top">
-                        <img
-                          src={createdAt}
-                          alt="CreatedAt"
-                          className="h-4 w-4"
-                        />
-                      </TooltipComponent>
-                    </div>
-                  </th>
-                  <th scope="col" className="flex-1 px-4 py-4">
-                    <div className="flex items-center justify-center">
-                      <TooltipComponent content="Wystawiono" position="Top">
-                        <img
-                          src={expiresAt}
-                          alt="CreatedAt"
-                          className="h-4 w-4"
-                        />
-                      </TooltipComponent>
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {insuranceList
-                  .slice(0, 5)
-                  .map((insurance) => (
+            <BasicPanel>
+              <PanelHeader
+                label={"ubezpieczenie"}
+                path={`/bus/edit/insurance/list/${id}`}
+              />
+              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase border-1 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" className="px-4 py-4">
+                      ID
+                    </th>
+                    <th scope="col" className="px-4 py-4 text-center">
+                      FIRMA
+                    </th>
+                    <th scope="col" className="px-4 py-4 text-center">
+                      CENA
+                    </th>
+                    <th scope="col" className="flex-1 px-4 py-4">
+                      <div className="flex items-center justify-center">
+                        <TooltipComponent content="Wystawiono" position="Top">
+                          <img
+                            src={createdAt}
+                            alt="CreatedAt"
+                            className="h-4 w-4"
+                          />
+                        </TooltipComponent>
+                      </div>
+                    </th>
+                    <th scope="col" className="flex-1 px-4 py-4">
+                      <div className="flex items-center justify-center">
+                        <TooltipComponent content="Wystawiono" position="Top">
+                          <img
+                            src={expiresAt}
+                            alt="CreatedAt"
+                            className="h-4 w-4"
+                          />
+                        </TooltipComponent>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {insuranceList.slice(0, 5).map((insurance) => (
                     <tr
                       key={insurance.id}
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -592,89 +607,106 @@ const BusEdit = () => {
                         <h1 className="text-bold">{insurance.price} zł</h1>
                       </td>
                       <td className="px-6 py-4 text-center">
-                        {new Date(insurance.createdAt).toLocaleDateString("pl-PL", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })}
+                        {new Date(insurance.createdAt).toLocaleDateString(
+                          "pl-PL",
+                          {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          }
+                        )}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        {new Date(insurance.expiresAt).toLocaleDateString("pl-PL", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })}
+                        {new Date(insurance.expiresAt).toLocaleDateString(
+                          "pl-PL",
+                          {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          }
+                        )}
                       </td>
                     </tr>
                   ))}
-              </tbody>
-            </table>
-          </BasicPanel>
-          ): null}
+                </tbody>
+              </table>
+            </BasicPanel>
+          ) : null}
         </TwoPartPanel>
         {userRole === "USER" ? (
-        <TwoPartPanel>
-          <BasicFullPanel>
-            <PanelHeader label={"TRASY BUSA"} path={`/route/list/${id}/bus`}/>
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase border-1 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
+          <TwoPartPanel>
+            <BasicFullPanel>
+              <PanelHeader
+                label={"TRASY BUSA"}
+                path={`/route/list/${id}/bus`}
+              />
+              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase border-1 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
                     <th scope="col" className="px-4 py-4">
-                    ID
-                  </th>
-                  <th scope="col" className="px-4 py-4 text-center">
-                    LINIA
-                  </th>
-                  <th scope="col" className="px-4 py-4 text-center">
-                    TRASA
-                  </th>
-                  <th scope="col" className="px-4 py-4 text-center">
-                    START
-                  </th>
-                  <th scope="col" className="px-4 py-4 text-center">
-                    TYP
-                  </th>
-                  <th scope="col" className="px-4 py-4 text-center">
-                    2-STRONNA
-                  </th>
-
-                </tr>
-              </thead>
-              <tbody>
-                {routeList.slice(0,5).map((route) => (
-                  <tr
-                    key={route.id}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                  >
-                    <th
+                      ID
+                    </th>
+                    <th scope="col" className="px-4 py-4 text-center">
+                      LINIA
+                    </th>
+                    <th scope="col" className="px-4 py-4 text-center">
+                      TRASA
+                    </th>
+                    <th scope="col" className="px-4 py-4 text-center">
+                      START
+                    </th>
+                    <th scope="col" className="px-4 py-4 text-center">
+                      TYP
+                    </th>
+                    <th scope="col" className="px-4 py-4 text-center">
+                      2-STRONNA
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {routeList.slice(0, 5).map((route) => (
+                    <tr
+                      key={route.id}
+                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    >
+                      <th
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
                         #{route.id}
                       </th>
-                    <td className="px-6 py-4 text-center">
-                        <NavigateHref label={route.busLine.number} path={`/busline/edit/${route.busLine_id}`}/>
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                    <NavigateHref label={'klik'} path={`/busroute/edit/${route.id}`}/>
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                    <h1 className="text-bold">{route.startTime}</h1>
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                    {returnTypeValue(route.type)}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                    {route.time === "FULL" ? (<h1 className="text-bold">TAK</h1>) : (<h1 className="text-bold">NIE</h1>)}
-                    </td>
-                    
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </BasicFullPanel>
-        </TwoPartPanel>
-        ): null}
+                      <td className="px-6 py-4 text-center">
+                        <NavigateHref
+                          label={route.busLine.number}
+                          path={`/busline/edit/${route.busLine_id}`}
+                        />
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <NavigateHref
+                          label={"klik"}
+                          path={`/busroute/edit/${route.id}`}
+                        />
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <h1 className="text-bold">{route.startTime}</h1>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        {returnTypeValue(route.type)}
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        {route.time === "FULL" ? (
+                          <h1 className="text-bold">TAK</h1>
+                        ) : (
+                          <h1 className="text-bold">NIE</h1>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </BasicFullPanel>
+          </TwoPartPanel>
+        ) : null}
       </BottomPanel>
       <ToastContainer />
     </div>

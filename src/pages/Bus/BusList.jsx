@@ -10,8 +10,12 @@ const BusList = () => {
   }, []);
 
   const fetchBus = async () => {
-    const response = await BusEditService.fetchBusList();
-    setBusList(response);
+    try {
+      const response = await BusEditService.fetchBusList();
+      setBusList(response);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (

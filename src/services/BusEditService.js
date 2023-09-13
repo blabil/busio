@@ -1,6 +1,6 @@
-import axios from 'axios';
-import ToastService from './ToastService';
-import { apiUrl } from '../data/dummy';
+import axios from "axios";
+import ToastService from "./ToastService";
+import { apiUrl } from "../data/dummy";
 
 const BusEditService = {
   endpointMap: {
@@ -14,65 +14,62 @@ const BusEditService = {
     return this.endpointMap[title] || null;
   },
 
-
+  /**
+   * @typedef     { Object } Bus
+   * @property    { string } registration
+   * @property    { string } state
+   * @property    { string } brand
+   * @property    { string } model
+   * @property    { string } productionYear
+   * @property    { string } seats
+   * @property    { string } engine
+   */
 
   /**
-     * @typedef     { Object } Bus
-     * @property    { string } registration
-     * @property    { string } state
-     * @property    { string } brand
-     * @property    { string } model
-     * @property    { string } productionYear
-     * @property    { string } seats
-     * @property    { string } engine
-     */
+   * Create a Bus DTO.
+   * @param       { Bus } registration - Rejestracja
+   * @param       { Bus } state - Stan pojazdu
+   * @param       { Bus } brand - Marka pojazdu
+   * @param       { Bus } model - Model pojazdu
+   * @param       { Bus } productionYear - Rok produkcji
+   * @param       { Bus } seats - Ilośc miejssc
+   * @param       { Bus } engine - Typ silnika
+   * @returns     { Bus } The Bus DTO.
+   */
 
-    /**
-     * Create a Bus DTO.
-     * @param       { Bus } registration - Rejestracja
-     * @param       { Bus } state - Stan pojazdu
-     * @param       { Bus } brand - Marka pojazdu
-     * @param       { Bus } model - Model pojazdu
-     * @param       { Bus } productionYear - Rok produkcji
-     * @param       { Bus } seats - Ilośc miejssc
-     * @param       { Bus } engine - Typ silnika
-     * @returns     { Bus } The Bus DTO.
-     */
+  returnBusDto(
+    registration,
+    state,
+    brand,
+    model,
+    productionYear,
+    seats,
+    engine
+  ) {
+    const busDto = {
+      registration: registration,
+      state: state,
+      brand: brand,
+      model: model,
+      productionYear: productionYear,
+      seats: seats,
+      engine: engine,
+    };
+    return busDto;
+  },
 
-    returnBusDto(registration, state, brand, model, productionYear, seats, engine)
-    {
-      const busDto = {
-        registration: registration,
-        state: state,
-        brand: brand,
-        model: model,
-        productionYear: productionYear,
-        seats: seats,
-        engine: engine,
-      }
-      return busDto;
-    },
-
-    handleRegisterBus: async (busDto) => {
-        try{
-          const response =  await axios
-          .post(
-            `${apiUrl}/bus/register`,
-            busDto,
-            { withCredentials: true }
-          )
-          return response.data.message;
-        }catch(error)
-        {
-          throw new Error(
-            ToastService.prepareToastMessage(error.response.data.message)
-          );
-        }
-    },
-
-
-
-
+  handleRegisterBus: async (busDto) => {
+    try {
+      const response = await axios.post(`${apiUrl}/bus/register`, busDto, {
+        withCredentials: true,
+      });
+      return response.data.message;
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
+  },
 
   /**
    * @typedef     { Object } Review
@@ -141,7 +138,6 @@ const BusEditService = {
     return issueDto;
   },
 
-
   /**
    * @typedef     { Object } Insurance
    * @property    { string } company
@@ -167,7 +163,7 @@ const BusEditService = {
       price: price,
       createdAt: createdAt,
       expiresAt: expiresAt,
-      bus_id: bus_id
+      bus_id: bus_id,
     };
     return insuranceDto;
   },
@@ -249,18 +245,24 @@ const BusEditService = {
   },
 
   handleBusDetails: async (id) => {
-    const response = await axios.get(`${apiUrl}/bus/${id}`, {
-      withCredentials: true,
-    });
-    return {
-      bus: response.data,
-      busProfile: response.data.busProfile,
-      busIssues: response.data.busIssues,
-      busBreakDowns: response.data.busBreakDowns,
-      busReviews: response.data.busReview,
-      busRoutes: response.data.busLineRoute,
-      busInsurance: response.data.BusInsurance
-    };
+    try {
+      const response = await axios.get(`${apiUrl}/bus/${id}`, {
+        withCredentials: true,
+      });
+      return {
+        bus: response.data,
+        busProfile: response.data.busProfile,
+        busIssues: response.data.busIssues,
+        busBreakDowns: response.data.busBreakDowns,
+        busReviews: response.data.busReview,
+        busRoutes: response.data.busLineRoute,
+        busInsurance: response.data.BusInsurance,
+      };
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 
   fetchBusProfile: async (id) => {
@@ -269,21 +271,18 @@ const BusEditService = {
         withCredentials: true,
       });
       return response.data;
-    } catch(error) {
+    } catch (error) {
       throw new Error(
         ToastService.prepareToastMessage(error.response.data.message)
       );
     }
   },
 
-
   handleRegisterIssueModify: async (dto) => {
     try {
-      const response = await axios.post(
-        `${apiUrl}/issue/modify`,
-        dto,
-        { withCredentials: true }
-      );
+      const response = await axios.post(`${apiUrl}/issue/modify`, dto, {
+        withCredentials: true,
+      });
       return response.data.message;
     } catch (error) {
       throw new Error(
@@ -293,26 +292,35 @@ const BusEditService = {
   },
 
   handleModifyIssuesList: async (id) => {
-    const response = await axios.get(
-      `${apiUrl}/issue/bus/modify/${id}`,
-      { withCredentials: true }
-    );
-    return response.data;
+    try {
+      const response = await axios.get(`${apiUrl}/issue/bus/modify/${id}`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 
   handleSolveIssue: async (id) => {
-    await axios.patch(`${apiUrl}/issue/solve/${id}`, null, {
-      withCredentials: true,
-    });
+    try {
+      await axios.patch(`${apiUrl}/issue/solve/${id}`, null, {
+        withCredentials: true,
+      });
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 
   handleRegisterBreakDownModify: async (dto) => {
     try {
-      const response = await axios.post(
-        `${apiUrl}/breakdown/modify`,
-        dto,
-        { withCredentials: true }
-      );
+      const response = await axios.post(`${apiUrl}/breakdown/modify`, dto, {
+        withCredentials: true,
+      });
       return response.data.message;
     } catch (error) {
       throw new Error(
@@ -322,52 +330,96 @@ const BusEditService = {
   },
 
   handleModifyBreakDownsList: async (id) => {
-    const response = await axios.get(
-      `${apiUrl}/breakdown/bus/modify/${id}`,
-      { withCredentials: true }
-    );
-    return response.data;
+    try {
+      const response = await axios.get(`${apiUrl}/breakdown/bus/modify/${id}`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 
   handleSolveBreakDown: async (id) => {
-    await axios.patch(`${apiUrl}/breakdown/solve/${id}`, null, {
-      withCredentials: true,
-    });
+    try {
+      await axios.patch(`${apiUrl}/breakdown/solve/${id}`, null, {
+        withCredentials: true,
+      });
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 
   handleReviewsDetails: async (id) => {
-    const response = await axios.get(`${apiUrl}/review/bus/${id}`, {
-      withCredentials: true,
-    });
-    return { busReviews: response.data.reviews, bus: response.data.bus };
+    try {
+      const response = await axios.get(`${apiUrl}/review/bus/${id}`, {
+        withCredentials: true,
+      });
+      return { busReviews: response.data.reviews, bus: response.data.bus };
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 
   handleInsuranceDetails: async (id) => {
-    const response = await axios.get(`${apiUrl}/insurance/bus/${id}`, {
-      withCredentials: true,
-    });
-    return { busInsurances: response.data.insurances, bus: response.data.bus };
+    try {
+      const response = await axios.get(`${apiUrl}/insurance/bus/${id}`, {
+        withCredentials: true,
+      });
+      return {
+        busInsurances: response.data.insurances,
+        bus: response.data.bus,
+      };
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 
   handleIssuesDetails: async (id) => {
-    const response = await axios.get(`${apiUrl}/issue/${id}`, {
-      withCredentials: true,
-    });
-    return { bus: response.data.bus, busIssues: response.data.issues };
+    try {
+      const response = await axios.get(`${apiUrl}/issue/${id}`, {
+        withCredentials: true,
+      });
+      return { bus: response.data.bus, busIssues: response.data.issues };
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 
   handleBreakDownsDetails: async (id) => {
-    const response = await axios.get(`${apiUrl}/breakdown/${id}`, {
-      withCredentials: true,
-    });
-    return { bus: response.data, busBreakDowns: response.data.breakdowns };
+    try {
+      const response = await axios.get(`${apiUrl}/breakdown/${id}`, {
+        withCredentials: true,
+      });
+      return { bus: response.data, busBreakDowns: response.data.breakdowns };
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 
   fetchBusList: async () => {
-    const response = await axios.get(`${apiUrl}/bus`, {
-      withCredentials: true,
-    });
-    return response.data;
+    try {
+      const response = await axios.get(`${apiUrl}/bus`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        ToastService.prepareToastMessage(error.response.data.message)
+      );
+    }
   },
 };
 

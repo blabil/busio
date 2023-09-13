@@ -31,12 +31,16 @@ const BusIssuesList = () => {
   const [confirmedId, setConfirmedId] = useState(null);
 
   const handleConfirmButton = async (id) => {
-    if (confirmedId === id) {
-      await BusEditService.handleSolveIssue(id);
-      fetchIssuesDetails();
-      setConfirmedId(null);
-    } else {
-      setConfirmedId(id);
+    try {
+      if (confirmedId === id) {
+        await BusEditService.handleSolveIssue(id);
+        fetchIssuesDetails();
+        setConfirmedId(null);
+      } else {
+        setConfirmedId(id);
+      }
+    } catch (error) {
+      triggerToast(error.message);
     }
   };
 
@@ -52,9 +56,9 @@ const BusIssuesList = () => {
   const [userToModal, setUserToModal] = useState({});
 
   async function handleOpenInfoIssue(issue) {
-    const user = await UserService.handleUserDetails(issue.user_id);
-    setUserToModal(user);
     try {
+      const user = await UserService.handleUserDetails(issue.user_id);
+      setUserToModal(user);
       setActiveIssue(issue);
       setIsIssueInfo(true);
     } catch (error) {}
@@ -64,15 +68,6 @@ const BusIssuesList = () => {
     setActiveIssue(null);
     fetchIssuesDetails();
   }
-
-  const triggerToast = (message) => {
-    toast(message, {
-      autoClose: 5000,
-      hideProgressBar: false,
-      position: toast.POSITION.BOTTOM_RIGHT,
-    });
-  };
-
   async function handleRegister(dto, type) {
     try {
       const response = await BusEditService.handleRegister(
@@ -89,14 +84,26 @@ const BusIssuesList = () => {
   }
 
   const fetchIssuesDetails = useCallback(async () => {
-    const response = await BusEditService.handleIssuesDetails(id);
-    setBus(response.bus);
-    setIssues(response.busIssues);
+    try {
+      const response = await BusEditService.handleIssuesDetails(id);
+      setBus(response.bus);
+      setIssues(response.busIssues);
+    } catch (error) {
+      triggerToast(error.message);
+    }
   }, [id]);
 
   useEffect(() => {
     fetchIssuesDetails();
   }, [id, fetchIssuesDetails]);
+
+  const triggerToast = (message) => {
+    toast(message, {
+      autoClose: 5000,
+      hideProgressBar: false,
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+  };
 
   return (
     <div className="flex flex-col gap-3 h-screen">
@@ -184,13 +191,23 @@ const BusIssuesList = () => {
                       })}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <button onClick={() => handleConfirmButton(issue.id)}>
+                      {issue.state === "UNSOLVED" ? (
+                        <button onClick={() => handleConfirmButton(issue.id)}>
+                        {confirmedId === issue.id ? (
+                          <GiConfirmed />
+                        ) : (
+                          <AiFillEdit />
+                        )}
+                        </button>
+                      ) : (
+                        <button disabled>
                         {confirmedId === issue.id ? (
                           <GiConfirmed />
                         ) : (
                           <AiFillEdit />
                         )}
                       </button>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <OpenModalPanelButton

@@ -53,12 +53,14 @@ const BusBreakDownList = () => {
   const [userToModal, setUserToModal] = useState({});
 
   async function handleOpenInfoBreakDown(breakDown) {
-    const user = await UserService.handleUserDetails(breakDown.user_id);
-    setUserToModal(user);
     try {
+      const user = await UserService.handleUserDetails(breakDown.user_id);
+      setUserToModal(user);
       setActiveBreakDown(breakDown);
       setIsBreakDownInfo(true);
-    } catch (error) {}
+    } catch (error) {
+      triggerToast(error.message);
+    }
   }
   function handleCloseInfoBreakDown() {
     setIsBreakDownInfo(false);
@@ -90,9 +92,13 @@ const BusBreakDownList = () => {
   }
 
   const fetchBreakDownsDetails = useCallback(async () => {
-    const response = await BusEditService.handleBusDetails(id);
-    setBus(response.bus);
-    setBreakDowns(response.busBreakDowns);
+    try {
+      const response = await BusEditService.handleBusDetails(id);
+      setBus(response.bus);
+      setBreakDowns(response.busBreakDowns);
+    } catch (error) {
+      triggerToast(error.message);
+    }
   }, [id]);
 
   useEffect(() => {
@@ -187,13 +193,23 @@ const BusBreakDownList = () => {
                       )}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <button onClick={() => handleConfirmButton(breakDown.id)}>
+                    {breakDown.state === "UNSOLVED" ? (
+                        <button onClick={() => handleConfirmButton(breakDown.id)}>
+                        {confirmedId === breakDown.id ? (
+                          <GiConfirmed />
+                        ) : (
+                          <AiFillEdit />
+                        )}
+                        </button>
+                      ) : (
+                        <button disabled>
                         {confirmedId === breakDown.id ? (
                           <GiConfirmed />
                         ) : (
                           <AiFillEdit />
                         )}
                       </button>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <OpenModalPanelButton

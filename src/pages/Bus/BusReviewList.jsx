@@ -41,26 +41,19 @@ const BusReviewList = () => {
   const [activeReview, setActiveReview] = useState(null);
   const [userToModal, setUserToModal] = useState({});
   async function handleOpenInfoReview(review) {
-    const user = await UserService.handleUserDetails(review.user_id);
-    setUserToModal(user);
     try {
+      const user = await UserService.handleUserDetails(review.user_id);
+      setUserToModal(user);
       setActiveReview(review);
       setIsReviewInfo(true);
-    } catch (error) {}
+    } catch (error) {
+      triggerToast(error.message);
+    }
   }
   function handleCloseInfoReview() {
     setIsReviewInfo(false);
     setActiveReview(null);
   }
-
-  const triggerToast = (message) => {
-    toast(message, {
-      autoClose: 5000,
-      hideProgressBar: false,
-      position: toast.POSITION.BOTTOM_RIGHT,
-    });
-  };
-
   async function handleRegister(dto, type) {
     try {
       const response = await BusEditService.handleRegister(
@@ -85,6 +78,14 @@ const BusReviewList = () => {
   useEffect(() => {
     fetchReviewsDetails();
   }, [id, fetchReviewsDetails]);
+
+  const triggerToast = (message) => {
+    toast(message, {
+      autoClose: 5000,
+      hideProgressBar: false,
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+  };
 
   return (
     <div className="flex flex-col gap-3 h-screen">
