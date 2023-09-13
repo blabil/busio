@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 import {Navbar, DriverSidebar} from '../components';
-import {  DriverMain } from '../pages';
+import { DriverRoute, DriverRouteInfo, DriverWelcome } from '../pages';
 import '../App.css';
 import { useStateContext } from '../contexts/ContextProvider';
 
@@ -46,16 +46,10 @@ const DriverDashboard = () => {
 
             <div>
                 <Routes>
-                    {/* test */}
-                    <Route  path='/' element={<DriverMain/>}/>
-                    <Route  path='/register' element=''/>
-                    <Route  path='/ecommerce' element='test'/>
+                    <Route  path='/' element={<DriverWelcome/>}/>
 
-                    {/* stronki */}
-                    <Route  path='/null' element='Test'/>
-                    <Route  path='/null2' element='Test'/>
-                    <Route  path='/null3' element='Test'/>
-                    
+                    <Route  path='/driver/route' element={<DriverRoute/>}/>
+                    <Route  path='/driver/route/:id' element={<DriverRouteInfo/>}/>
                 </Routes>
             </div>
             </div>

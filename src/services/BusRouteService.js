@@ -369,7 +369,7 @@ const BusRouteService = {
     }
   },
 
-  fetchFirstLastStop: async(id, type) => {
+  fetchFirstLastStop: async(id) => {
     try{
       const response = await axios.get(`${apiUrl}/busline/stops/fl/${id}`, {withCredentials: true});
       return response.data;

@@ -71,19 +71,9 @@ export const driverLinks = [
     title: 'Zarządzaj',
     links: [
       {
-        name: 'Moja trasa',
-        path: '',
+        name: 'Moja trasy',
+        path: 'driver/route',
         icon: <FaBook />,
-      },
-      {
-        name: 'Urlop',
-        path: 'usterka',
-        icon: <FaGavel />,
-      },
-      {
-        name: 'Informacje',
-        path: 'stanPojazdu',
-        icon: <FiShoppingBag />,
       },
     ],
   },
